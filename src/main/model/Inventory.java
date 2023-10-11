@@ -51,12 +51,13 @@ public class Inventory {
     //REQUIRES: Item with corresponding name should be in the inventory
     //EFFECTS: returns the Item with corresponding name
     public Item getItem(String name) {
+        Item returned = null;
         for (Item i : itemList) {
             if (i.getName().equalsIgnoreCase(name)) {
-                return i;
+                returned = i;
             }
         }
-        return null;
+        return returned;
     }
 
     public List<Item> getItemList() {
