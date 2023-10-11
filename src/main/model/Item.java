@@ -17,12 +17,6 @@ public class Item {
         this.minimumStockLimit = 0;
     }
 
-    //MODIFIES: this
-    //EFFECTS: changes item name into newName
-    public void editName(String newName) {
-        this.name = newName;
-    }
-
     //REQUIRES: amount > 0
     //MODIFIES: this
     //EFFECTS: adds quantity of item by amount

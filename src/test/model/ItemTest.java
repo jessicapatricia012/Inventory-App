@@ -21,12 +21,6 @@ public class ItemTest {
     }
 
     @Test
-    public void testEditName() {
-        testItem.editName("New Name");
-        assertEquals("New Name", testItem.getName());
-    }
-
-    @Test
     public void testAddQuantityOnce() {
         testItem.addQuantity(100);
         assertEquals(100, testItem.getQuantity());

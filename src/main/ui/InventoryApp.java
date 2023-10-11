@@ -98,9 +98,8 @@ public class InventoryApp {
             while (true) {
                 printItemInfo(myInventory.getItem(itemName));
                 System.out.println("\nSelect item info to be edited:");
-                System.out.println("\t1 - Name");
-                System.out.println("\t2 - Quantity");
-                System.out.println("\t3 - Minimum stock limit");
+                System.out.println("\t1 - Quantity");
+                System.out.println("\t2 - Minimum stock limit");
                 System.out.println("\t0 - Back to MAIN MENU");
                 int command = input.nextInt();
                 input.nextLine();
@@ -118,10 +117,8 @@ public class InventoryApp {
     //EFFECTS: processes user command from "Search and edit item info" menu
     private void processSearchEditItemCommand(String itemName, int command) {
         if (command == 1) {
-            setName(itemName);
-        } else if (command == 2) {
             setQuantity(itemName);
-        } else if (command == 3) {
+        } else if (command == 2) {
             setMinimumStockLimit(itemName);
         } else if (command == 0) {
             displayMenu();
@@ -148,14 +145,6 @@ public class InventoryApp {
         }
     }
 
-    // MODIFIES: Item myInventory.getItem(itemName)
-    // EFFECTS: set(rename) the item's name
-    private void setName(String itemName) {
-        String newName;
-        System.out.println("Enter new item name: ");
-        newName = input.nextLine();
-        myInventory.getItem(itemName).editName(newName);
-    }
 
     // MODIFIES: Item myInventory.getItem(itemName)
     // EFFECTS: set the item's quantity that has to be >= 0, otherwise
