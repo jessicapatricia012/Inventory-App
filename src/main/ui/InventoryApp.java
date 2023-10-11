@@ -3,7 +3,6 @@ package ui;
 import model.Inventory;
 import model.Item;
 
-import java.util.List;
 import java.util.Scanner;
 
 public class InventoryApp {
@@ -37,7 +36,7 @@ public class InventoryApp {
         if (command == 1) {
             doAllItems();
         } else if (command == 2) {
-            doSearchItem();
+            doSearchEditItem();
         } else if (command == 3) {
             doAddItem();
         } else if (command == 4) {
@@ -60,7 +59,7 @@ public class InventoryApp {
     private void displayMenu() {
         System.out.println("MAIN MENU");
         System.out.println("\t1 - All items");
-        System.out.println("\t2 - Search item");
+        System.out.println("\t2 - Search or edit item");
         System.out.println("\t3 - Add new item");
         System.out.println("\t4 - Remove item");
         System.out.println("\t5 - Restock item");
@@ -72,20 +71,47 @@ public class InventoryApp {
         if (myInventory.getItemList().isEmpty()) {
             System.out.println("Inventory is empty.\n");
         } else {
-            printItemList(myInventory.getItemList());
+            for (Item i : myInventory.getItemList()) {
+                printItemInfo(i);
+            }
         }
     }
 
-    private void doSearchItem() {
+    private void doSearchEditItem() {
         String itemName;
         System.out.println("\nEnter the item you are looking for:");
         itemName = input.nextLine();
         if (myInventory.itemIsThere(itemName)) {
-            ;
+            while (true) {
+                printItemInfo(myInventory.getItem(itemName));
+                System.out.println("\nSelect item info to be edited:");
+                System.out.println("\t1 - Name");
+                System.out.println("\t2 - Quantity");
+                System.out.println("\t3 - Minimum stock limit");
+                System.out.println("\t0 - Back to MAIN MENU");
+                int command = input.nextInt();
+                input.nextLine();
+                if (command == 0) {
+                    break;
+                }
+                processSearchEditItemCommand(itemName, command);
+                break;
+            }
         } else {
             System.out.println("Item not found");
         }
+    }
 
+    private void processSearchEditItemCommand(String itemName, int command) {
+        if (command == 1) {
+            setName(itemName);
+        } else if (command == 2) {
+            setQuantity(itemName);
+        } else if (command == 3) {
+            setMinimumStockLimit(itemName);
+        } else {
+            System.out.println("Selection not valid...");
+        }
     }
 
     private void doAddItem() {
@@ -101,6 +127,15 @@ public class InventoryApp {
             System.out.println(itemName + " is successfully added to the inventory.\n");
         } else {
             System.out.println(itemName + " is already registered in the inventory.\n");
+        }
+    }
+
+    private void setName(String itemName) {
+        String newName;
+        while (true) {
+            System.out.println("Enter new item name: ");
+            newName = input.nextLine();
+            myInventory.getItem(itemName).editName(newName);
         }
     }
 
@@ -179,15 +214,16 @@ public class InventoryApp {
             System.out.println("No item is low in stock.\n");
         } else {
             System.out.println("Please restock these items:");
-            printItemList(myInventory.getLowStockItems());
+            for (Item i : myInventory.getLowStockItems()) {
+                printItemInfo(i);
+            }
+
         }
     }
 
-    private void printItemList(List<Item> items) {
-        for (Item i : items) {
-            System.out.println("\tName: " + i.getName());
-            System.out.println("\tQty: " + i.getQuantity());
-            System.out.println("\tMinimum Stock Limit: " + i.getMinimumStockLimit() + "\n");
-        }
+    private void printItemInfo(Item i) {
+        System.out.println("\tName: " + i.getName());
+        System.out.println("\tQty: " + i.getQuantity());
+        System.out.println("\tMinimum Stock Limit: " + i.getMinimumStockLimit() + "\n");
     }
 }
