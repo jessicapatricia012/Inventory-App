@@ -59,8 +59,8 @@ class InventoryTest {
         assertEquals(20, testInventory.getItem("item 1").getQuantity());
     }
 
-    @Test
-    public void test
+//    @Test
+//    public void testGetItem
 
 
     public void addItems(){
