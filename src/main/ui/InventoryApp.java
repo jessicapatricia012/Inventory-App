@@ -83,18 +83,6 @@ public class InventoryApp {
             setMinimumStockLimit(itemName);
 
             System.out.println(itemName + " is successfully added to the inventory.\n");
-//            do {
-//                System.out.println("Enter item quantity: ");
-//                qty = input.nextInt();
-//                input.nextLine();
-//                if (qty < 0) {
-//                    System.out.println("Value should be greater or equal to 0.\n");
-//                } else {
-//                    System.out.println(itemName + " is successfully added "
-//                            + "to the inventory with a quantity of " + qty + "\n");
-//                }
-//            } while (qty < 0);
-//            myInventory.addItemQuantity(itemName, qty);
         } else {
             System.out.println(itemName + " is already registered in the inventory.\n");
         }
