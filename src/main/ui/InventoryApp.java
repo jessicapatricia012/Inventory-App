@@ -2,7 +2,6 @@ package ui;
 
 import model.Inventory;
 
-import javax.xml.namespace.QName;
 import java.util.Scanner;
 
 public class InventoryApp {
@@ -16,7 +15,7 @@ public class InventoryApp {
     private void runApp() {
         input = new Scanner(System.in);
         input.useDelimiter("\n");
-        int command = 0;
+        int command;
         do {
             displayMenu();
             command = input.nextInt();
@@ -65,7 +64,6 @@ public class InventoryApp {
     }
 
     private void doAddItem() {
-        int command;
         String itemName;
         boolean added;
 
@@ -81,7 +79,6 @@ public class InventoryApp {
     }
 
     private void doRemoveItem() {
-        int command;
         String itemName;
         boolean removed;
 
