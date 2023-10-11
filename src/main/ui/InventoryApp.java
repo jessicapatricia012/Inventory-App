@@ -15,22 +15,17 @@ public class InventoryApp {
 
     //codes are based on TellerApp
     private void runApp() {
-        int command;
-
         init();
-
         while (true) {
             displayMenu();
-            command = input.nextInt();
+            int command = input.nextInt();
             input.nextLine();
             if (command == 0) {
                 break;
             }
             processCommand(command);
         }
-
         System.out.println("Closing Inventory App...");
-
     }
 
     //codes are based on TellerApp
