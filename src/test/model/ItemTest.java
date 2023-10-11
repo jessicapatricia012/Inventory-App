@@ -33,6 +33,12 @@ public class ItemTest {
     }
 
     @Test
+    public void testAddQuantityBoundary() {
+        testItem.addQuantity(1);
+        assertEquals(1, testItem.getQuantity());
+    }
+
+    @Test
     public void testAddQuantityMultipleTimes() {
         testItem.addQuantity(100);
         assertEquals(100, testItem.getQuantity());
@@ -59,6 +65,30 @@ public class ItemTest {
         testItem.addQuantity(10);
         testItem.setMinimumStockLimit(10);
         assertFalse(testItem.isLowStock());
+    }
+
+    @Test
+    public void setQuantity() {
+        testItem.setQuantity(100);
+        assertEquals(100, testItem.getQuantity());
+    }
+
+    @Test
+    public void setQuantityBoundary() {
+        testItem.setQuantity(0);
+        assertEquals(0, testItem.getQuantity());
+    }
+
+    @Test
+    public void setMinimumStockLimit() {
+        testItem.setMinimumStockLimit(100);
+        assertEquals(100, testItem.getMinimumStockLimit());
+    }
+
+    @Test
+    public void setMinimumStockLimitBoundary() {
+        testItem.setMinimumStockLimit(0);
+        assertEquals(0, testItem.getMinimumStockLimit());
     }
 
 }

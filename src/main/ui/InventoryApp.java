@@ -5,15 +5,19 @@ import model.Item;
 
 import java.util.Scanner;
 
+//Inventory application
 public class InventoryApp {
     private Inventory myInventory;
     private Scanner input;
 
+    //EFFECTS: run the app
     public InventoryApp() {
         runApp();
     }
 
     //codes are based on TellerApp
+    // MODIFIES: this
+    // EFFECTS: processes user input
     private void runApp() {
         init();
         while (true) {
@@ -29,6 +33,8 @@ public class InventoryApp {
     }
 
     //codes are based on TellerApp
+    //MODIFIES: this
+    //EFFECTS: processes user command
     private void processCommand(int command) {
         if (command == 1) {
             doAllItems();
@@ -47,13 +53,17 @@ public class InventoryApp {
         }
     }
 
+    // codes are based on TellerApp
+    // MODIFIES: this
+    // EFFECTS: initializes inventory and Scanner
     private void init() {
         myInventory = new Inventory();
         input = new Scanner(System.in);
         input.useDelimiter("\n");
     }
 
-    //codes are based on TellerApp
+    // codes are based on TellerApp
+    // EFFECTS: displays main menu to user
     private void displayMenu() {
         System.out.println("MAIN MENU");
         System.out.println("\t1 - All items");
@@ -65,6 +75,8 @@ public class InventoryApp {
         System.out.println("\t0 - Close app");
     }
 
+    // EFFECTS: displays all items in the inventory with their information.
+    //          If inventory is empty, prints out a statement that says so.
     private void doAllItems() {
         if (myInventory.getItemList().isEmpty()) {
             System.out.println("Inventory is empty.\n");
@@ -75,6 +87,9 @@ public class InventoryApp {
         }
     }
 
+    // MODIFIES: this
+    // EFFECTS: displays the information of the item that the user searched for (by name) and provides the user
+    //          with options to edit the information related to the item.
     private void doSearchEditItem() {
         String itemName;
         System.out.println("\nEnter the item you are looking for:");
@@ -99,6 +114,8 @@ public class InventoryApp {
         }
     }
 
+    //MODIFIES: this
+    //EFFECTS: processes user command from "Search and edit item info" menu
     private void processSearchEditItemCommand(String itemName, int command) {
         if (command == 1) {
             setName(itemName);
@@ -113,6 +130,9 @@ public class InventoryApp {
         }
     }
 
+    // MODIFIES: this
+    // EFFECTS: add new Item and its info into myInventory.
+    //          If Item already exist, prints out a statement that says so.
     private void doAddItem() {
         String itemName;
 
@@ -128,6 +148,8 @@ public class InventoryApp {
         }
     }
 
+    // MODIFIES: Item myInventory.getItem(itemName)
+    // EFFECTS: set(rename) the item's name
     private void setName(String itemName) {
         String newName;
         System.out.println("Enter new item name: ");
@@ -135,6 +157,9 @@ public class InventoryApp {
         myInventory.getItem(itemName).editName(newName);
     }
 
+    // MODIFIES: Item myInventory.getItem(itemName)
+    // EFFECTS: set the item's quantity that has to be >= 0, otherwise
+    //          user will be prompted to enter another amount >= 0
     private void setQuantity(String itemName) {
         int qty;
         while (true) {
@@ -150,11 +175,13 @@ public class InventoryApp {
         }
     }
 
+    // MODIFIES: Item myInventory.getItem(itemName)
+    // EFFECTS: set the item's minimum stock limit that has to be >= 0, otherwise
+    //          user will be prompted to enter another amount >= 0
     private void setMinimumStockLimit(String itemName) {
-        int minStock;
         while (true) {
             System.out.println("Enter item minimum stock limit: ");
-            minStock = input.nextInt();
+            int minStock = input.nextInt();
             input.nextLine();
             if (minStock < 0) {
                 System.out.println("Value should be greater or equal to 0.\n");
@@ -165,6 +192,9 @@ public class InventoryApp {
         }
     }
 
+    // MODIFIES: this
+    // EFFECTS: remove item entered by user from inventory.
+    //          If item does not exist, prints out a statement that says so.
     private void doRemoveItem() {
         String itemName;
         boolean removed;
@@ -179,6 +209,9 @@ public class InventoryApp {
         }
     }
 
+    // MODIFIES: this, Item myInventory.getItem(itemName)
+    // EFFECTS: restock item based on amount input by user that has to be > 0 , otherwise
+    //          user will be prompted to enter another amount > 0
     private void doRestockItem() {
         String itemName;
         int amount;
@@ -205,6 +238,7 @@ public class InventoryApp {
                 + "\nQty: " + myInventory.getItem(itemName).getQuantity() + "\n");
     }
 
+    // EFFECTS: displays item that has low stock.
     private void doLowStockReminder() {
         if (myInventory.getLowStockItems().isEmpty()) {
             System.out.println("No item is low in stock.\n");
@@ -217,6 +251,7 @@ public class InventoryApp {
         }
     }
 
+    // EFFECTS: prints Item i's information to console
     private void printItemInfo(Item i) {
         System.out.println("\tName: " + i.getName());
         System.out.println("\tQty: " + i.getQuantity());

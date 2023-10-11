@@ -23,7 +23,7 @@ public class Item {
         this.name = newName;
     }
 
-    //REQUIRES: amount >= 0
+    //REQUIRES: amount > 0
     //MODIFIES: this
     //EFFECTS: adds quantity of item by amount
     public void addQuantity(int amount) {
@@ -37,10 +37,16 @@ public class Item {
         return quantity < minimumStockLimit;
     }
 
+    //REQUIRES: amount >= 0
+    //MODIFIES: this
+    //EFFECTS: adds quantity of item by amount
     public void setQuantity(int quantity) {
         this.quantity = quantity;
     }
 
+    //REQUIRES: minimumStockLimit >= 0
+    //MODIFIES: this
+    //EFFECTS: set item's minimum stock limit
     public void setMinimumStockLimit(int minimumStockLimit) {
         this.minimumStockLimit = minimumStockLimit;
     }
