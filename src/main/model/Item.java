@@ -5,10 +5,6 @@ public class Item {
     private String name;
     private int quantity;
     private int minimumStockLimit;
-//    private String location;
-//    private double buyPrice;
-//    private double sellPrice;
-
 
     //EFFECTS: constructs an item with given name, a quantity of 0, and a minimum stock limit of 0
     public Item(String name) {
