@@ -10,10 +10,25 @@ public class Inventory {
         myInventory = new ArrayList<>();
     }
 
-    public boolean itemIsThere(String name) {
+    public int numItems() {
+        return myInventory.size();
+    }
+
+    public Item getItem(String name) {
         for (Item i : myInventory) {
             if (i.getName().equalsIgnoreCase(name)) {
-                return true;
+                return i;
+            }
+        }
+        return null;
+    }
+
+    public boolean itemIsThere(String name) {
+        if (!myInventory.isEmpty()) {
+            for (Item i : myInventory) {
+                if (i.getName().equalsIgnoreCase(name)) {
+                    return true;
+                }
             }
         }
         return false;
@@ -29,14 +44,17 @@ public class Inventory {
     }
 
     public boolean removeItem(String name) {
-        if (itemIsThere(name)) {
-            return myInventory.remove(name);
-        } else {
-            return false; //item not found
+        for (Item i : myInventory) {
+            if (i.getName().equalsIgnoreCase(name)) {
+                if (myInventory.remove(i)) {
+                    return true;
+                }
+            }
         }
+        return false;
     }
 
-    public void restock(String name, int numNewStock) {
+    public void addItemQuantity(String name, int numNewStock) {
         for (Item i : myInventory) {
             if (i.getName().equalsIgnoreCase(name)) {
                 i.addQuantity(numNewStock);
@@ -44,8 +62,14 @@ public class Inventory {
         }
     }
 
-    public void checkLowStock() {
-
+    public List<Item> getLowStockItems() {
+        List<Item> lowStockItems = new ArrayList<>();
+        for (Item i : myInventory) {
+            if (i.isLowStock()) {
+                lowStockItems.add(i);
+            }
+        }
+        return lowStockItems;
     }
 
 

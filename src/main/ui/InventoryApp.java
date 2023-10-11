@@ -1,8 +1,8 @@
 package ui;
 
 import model.Inventory;
+import model.Item;
 
-import javax.xml.namespace.QName;
 import java.util.Scanner;
 
 public class InventoryApp {
@@ -14,17 +14,19 @@ public class InventoryApp {
     }
 
     private void runApp() {
-        input = new Scanner(System.in);
-        input.useDelimiter("\n");
-        int command = 0;
-        do {
+        int command;
+
+        init();
+
+        while (true) {
             displayMenu();
             command = input.nextInt();
+            input.nextLine();
             if (command == 0) {
                 break;
             }
             processCommand(command);
-        } while (true);
+        }
 
         System.out.println("Closing Inventory App...");
 
@@ -40,19 +42,25 @@ public class InventoryApp {
         } else if (command == 4) {
             doRestockItem();
         } else if (command == 5) {
-            doLowStockWarnings();
+            doLowStockReminder();
         } else {
             System.out.println("Selection not valid...");
         }
     }
 
+    private void init() {
+        myInventory = new Inventory();
+        input = new Scanner(System.in);
+        input.useDelimiter("\n");
+    }
+
     private void displayMenu() {
         System.out.println("MAIN MENU");
         System.out.println("\t1 - Search item");
-        System.out.println("\t2 - Add item");
+        System.out.println("\t2 - Add new item");
         System.out.println("\t3 - Remove item");
         System.out.println("\t4 - Restock item");
-        System.out.println("\t5 - Low stock warnings");
+        System.out.println("\t5 - Low stock reminder");
         System.out.println("\t0 - Close app");
     }
 
@@ -65,23 +73,64 @@ public class InventoryApp {
     }
 
     private void doAddItem() {
-        int command;
         String itemName;
-        boolean added;
+        int qty;
 
         System.out.println("\nEnter the name of the item to be added:");
         itemName = input.nextLine();
-        added = myInventory.addItem(itemName);
-        if (added) {
-            System.out.println(itemName + "is successfully added to the inventory.");
-        } else {
-            System.out.println(itemName + "is already registered in the inventory");
-        }
+        if (myInventory.addItem(itemName)) {
+            setQuantity(itemName);
+            setMinimumStockLimit(itemName);
 
+            System.out.println(itemName + " is successfully added to the inventory.\n");
+//            do {
+//                System.out.println("Enter item quantity: ");
+//                qty = input.nextInt();
+//                input.nextLine();
+//                if (qty < 0) {
+//                    System.out.println("Value should be greater or equal to 0.\n");
+//                } else {
+//                    System.out.println(itemName + " is successfully added "
+//                            + "to the inventory with a quantity of " + qty + "\n");
+//                }
+//            } while (qty < 0);
+//            myInventory.addItemQuantity(itemName, qty);
+        } else {
+            System.out.println(itemName + " is already registered in the inventory.\n");
+        }
+    }
+
+    private void setQuantity(String itemName) {
+        int qty;
+        while (true) {
+            System.out.println("Enter item quantity: ");
+            qty = input.nextInt();
+            input.nextLine();
+            if (qty < 0) {
+                System.out.println("Value should be greater or equal to 0.\n");
+            } else {
+                myInventory.getItem(itemName).setQuantity(qty);
+                break;
+            }
+        }
+    }
+
+    private void setMinimumStockLimit(String itemName) {
+        int minStock;
+        while (true) {
+            System.out.println("Enter item minimum stock limit: ");
+            minStock = input.nextInt();
+            input.nextLine();
+            if (minStock < 0) {
+                System.out.println("Value should be greater or equal to 0.\n");
+            } else {
+                myInventory.getItem(itemName).setMinimumStockLimit(minStock);
+                break;
+            }
+        }
     }
 
     private void doRemoveItem() {
-        int command;
         String itemName;
         boolean removed;
 
@@ -89,33 +138,48 @@ public class InventoryApp {
         itemName = input.nextLine();
         removed = myInventory.removeItem(itemName);
         if (removed) {
-            System.out.println(itemName + " and related information has been deleted.");
+            System.out.println(itemName + " and related information has been deleted.\n");
         } else {
-            System.out.println(itemName + " not found. \nReturning to MAIN MENU...");
+            System.out.println(itemName + " not found. \n");
         }
     }
 
     private void doRestockItem() {
         String itemName;
         int numNewStock;
-        do {
+        while (true) {
             System.out.println("\nEnter the name of the item to be restocked: ");
             itemName = input.nextLine();
             if (!myInventory.itemIsThere(itemName)) {
                 System.out.println("\nItem not found.");
+            } else {
+                break;
             }
-        } while (!myInventory.itemIsThere(itemName));
-        do {
-            System.out.println("\nEnter the number of new stocks coming: ");
+        }
+        while (true) {
+            System.out.println("Enter the number of new stocks coming: ");
             numNewStock = input.nextInt();
             if (numNewStock <= 0) {
-                System.out.println("\nValue has to be greater than 0.");
+                System.out.println("Value has to be greater than 0.");
+            } else {
+                break;
             }
-        } while (numNewStock <= 0);
-        myInventory.restock(itemName, numNewStock);
+        }
+        myInventory.addItemQuantity(itemName, numNewStock);
+        System.out.println(itemName + " has been restocked."
+                + "\nQty: " + myInventory.getItem(itemName).getQuantity() + "\n");
     }
 
-    private void doLowStockWarnings() {
-
+    private void doLowStockReminder() {
+        if (myInventory.getLowStockItems().isEmpty()) {
+            System.out.println("No item is low in stock.\n");
+        } else {
+            System.out.println("Please restock these items:");
+            for (Item i : myInventory.getLowStockItems()) {
+                System.out.println("\tName: " + i.getName());
+                System.out.println("\tQty: " + i.getQuantity());
+                System.out.println("\tMinimum Stock Limit: " + i.getMinimumStockLimit() + "\n");
+            }
+        }
     }
 }
