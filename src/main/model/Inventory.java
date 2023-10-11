@@ -48,19 +48,8 @@ public class Inventory {
         return false;
     }
 
-    //REQUIRED: numNewStock > 0 and Item with corresponding name should exist in the inventory
-    //MODIFIES: this
-    //EFFECTS: adds numNewStock into the quantity of Item with corresponding name
-    public void addItemQuantity(String name, int numNewStock) {
-        for (Item i : itemList) {
-            if (i.getName().equalsIgnoreCase(name)) {
-                i.addQuantity(numNewStock);
-            }
-        }
-    }
-
     //REQUIRES: Item with corresponding name should be in the inventory
-    //EFFECS: returns the Item with corresponding name
+    //EFFECTS: returns the Item with corresponding name
     public Item getItem(String name) {
         for (Item i : itemList) {
             if (i.getName().equalsIgnoreCase(name)) {

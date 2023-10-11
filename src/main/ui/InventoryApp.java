@@ -13,6 +13,7 @@ public class InventoryApp {
         runApp();
     }
 
+    //codes are based on TellerApp
     private void runApp() {
         int command;
 
@@ -32,6 +33,7 @@ public class InventoryApp {
 
     }
 
+    //codes are based on TellerApp
     private void processCommand(int command) {
         if (command == 1) {
             doAllItems();
@@ -56,10 +58,11 @@ public class InventoryApp {
         input.useDelimiter("\n");
     }
 
+    //codes are based on TellerApp
     private void displayMenu() {
         System.out.println("MAIN MENU");
         System.out.println("\t1 - All items");
-        System.out.println("\t2 - Search or edit item");
+        System.out.println("\t2 - Search and edit item info");
         System.out.println("\t3 - Add new item");
         System.out.println("\t4 - Remove item");
         System.out.println("\t5 - Restock item");
@@ -95,7 +98,6 @@ public class InventoryApp {
                     break;
                 }
                 processSearchEditItemCommand(itemName, command);
-                break;
             }
         } else {
             System.out.println("Item not found");
@@ -109,6 +111,8 @@ public class InventoryApp {
             setQuantity(itemName);
         } else if (command == 3) {
             setMinimumStockLimit(itemName);
+        } else if (command == 0) {
+            displayMenu();
         } else {
             System.out.println("Selection not valid...");
         }
@@ -116,7 +120,6 @@ public class InventoryApp {
 
     private void doAddItem() {
         String itemName;
-        int qty;
 
         System.out.println("\nEnter the name of the item to be added:");
         itemName = input.nextLine();
@@ -132,11 +135,9 @@ public class InventoryApp {
 
     private void setName(String itemName) {
         String newName;
-        while (true) {
-            System.out.println("Enter new item name: ");
-            newName = input.nextLine();
-            myInventory.getItem(itemName).editName(newName);
-        }
+        System.out.println("Enter new item name: ");
+        newName = input.nextLine();
+        myInventory.getItem(itemName).editName(newName);
     }
 
     private void setQuantity(String itemName) {
@@ -185,7 +186,7 @@ public class InventoryApp {
 
     private void doRestockItem() {
         String itemName;
-        int numNewStock;
+        int amount;
         while (true) {
             System.out.println("\nEnter the name of the item to be restocked: ");
             itemName = input.nextLine();
@@ -197,14 +198,14 @@ public class InventoryApp {
         }
         while (true) {
             System.out.println("Enter the number of new stocks coming: ");
-            numNewStock = input.nextInt();
-            if (numNewStock <= 0) {
+            amount = input.nextInt();
+            if (amount <= 0) {
                 System.out.println("Value has to be greater than 0.");
             } else {
                 break;
             }
         }
-        myInventory.addItemQuantity(itemName, numNewStock);
+        myInventory.getItem(itemName).addQuantity(amount);
         System.out.println(itemName + " has been restocked."
                 + "\nQty: " + myInventory.getItem(itemName).getQuantity() + "\n");
     }

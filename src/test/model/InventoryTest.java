@@ -26,11 +26,12 @@ class InventoryTest {
         assertFalse(testInventory.itemIsThere("item 2"));
         assertFalse(testInventory.itemIsThere("item 3"));
 
-        testAddItem(); // adds item 1, 2
+        testAddItem();
 
         assertTrue(testInventory.itemIsThere("Item 1"));
         assertTrue(testInventory.itemIsThere("Item 2"));
-        assertFalse(testInventory.itemIsThere("item 3"));
+        assertTrue(testInventory.itemIsThere("Item 3"));
+        assertFalse(testInventory.itemIsThere("item 4"));
     }
 
     @Test
@@ -42,29 +43,42 @@ class InventoryTest {
 
     @Test
     public void testRemoveItem() {
-        addItems(); // adds item 1, 2
+        addItems();
 
         assertTrue(testInventory.removeItem("item 1"));
         assertFalse(testInventory.removeItem("item 1"));
-        assertFalse(testInventory.removeItem("item 3"));
+        assertFalse(testInventory.removeItem("item 4"));
     }
 
     @Test
-    public void testAddItemQuantity() {
-        addItems(); // adds item 1, 2
-
-        testInventory.addItemQuantity("item 1", 10);
-        assertEquals(10, testInventory.getItem("item 1").getQuantity());
-        testInventory.addItemQuantity("item 1", 10);
-        assertEquals(20, testInventory.getItem("item 1").getQuantity());
+    public void testGetItem() {
+        addItems();
+        assertEquals("Item 1",testInventory.getItem("Item 1").getName());
     }
 
-//    @Test
-//    public void testGetItem
+    @Test
+    public void testGetLowStockOItems() {
+        addItems();
+        testInventory.getItem("Item 1").setQuantity(10);
+        testInventory.getItem("Item 2").setQuantity(0);
+        testInventory.getItem("Item 3").setQuantity(1);
+
+        testInventory.getItem("Item 1").setMinimumStockLimit(5);
+        testInventory.getItem("Item 2").setMinimumStockLimit(5);
+        testInventory.getItem("Item 3").setMinimumStockLimit(5);
+
+        List<Item> expected = new ArrayList<>();
+        expected.add(testInventory.getItem("Item 2"));
+        expected.add(testInventory.getItem("Item 3"));
+
+        assertEquals(expected, testInventory.getLowStockItems());
+    }
+
 
 
     public void addItems(){
         testInventory.addItem("Item 1");
         testInventory.addItem("Item 2");
+        testInventory.addItem("Item 3");
     }
 }

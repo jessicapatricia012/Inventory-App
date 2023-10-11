@@ -5,6 +5,10 @@ public class Item {
     private String name;
     private int quantity;
     private int minimumStockLimit;
+//    private String location;
+//    private double buyPrice;
+//    private double sellPrice;
+
 
     //EFFECTS: constructs an item with given name, a quantity of 0, and a minimum stock limit of 0
     public Item(String name) {
@@ -30,11 +34,7 @@ public class Item {
     //         Returns true if quantity is less than minimum stock limit.
     //         Returns false if quantity is greater than or equal to minimum stock limit
     public boolean isLowStock() {
-        if (quantity < minimumStockLimit) {
-            return true;
-        } else {
-            return false;
-        }
+        return quantity < minimumStockLimit;
     }
 
     public void setQuantity(int quantity) {

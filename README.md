@@ -8,4 +8,4 @@ This application will be most useful for store owners, who wants a record of the
 -  As a user, I want to be able to add or remove an item to my inventory
 -  As a user, I want to be able to update the stock of my items
 -  As a user, I want to be able to view the information related to my item
--  As a user, I want to be able to assign prices to my items
+-  As a user, I want to be able to be able to check the items with low stocks
