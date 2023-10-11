@@ -16,7 +16,7 @@ class InventoryTest {
 
     @Test
     public void testConstructor() {
-        assertEquals(0, testInventory.numItems());
+        assertTrue(testInventory.getItemList().isEmpty());
     }
 
     @Test

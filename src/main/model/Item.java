@@ -24,7 +24,11 @@ public class Item {
     //         Returns true if quantity is less than minimum stock limit.
     //         Returns false if quantity is greater than or equal to minimum stock limit
     public boolean isLowStock() {
-        return (quantity < minimumStockLimit);
+        if (quantity < minimumStockLimit) {
+            return true;
+        } else {
+            return false;
+        }
     }
 
     public void setQuantity(int quantity) {

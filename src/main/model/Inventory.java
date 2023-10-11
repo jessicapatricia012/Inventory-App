@@ -2,20 +2,18 @@ package model;
 
 import java.util.*;
 
-// represents an inventory
+// represents an inventory containing a list of items
 public class Inventory {
-    private List<Item> myInventory;
+    private List<Item> itemList;
 
+    //EFFECTS: construct an empty list of items
     public Inventory() {
-        myInventory = new ArrayList<>();
+        itemList = new ArrayList<>();
     }
 
-    public int numItems() {
-        return myInventory.size();
-    }
 
     public Item getItem(String name) {
-        for (Item i : myInventory) {
+        for (Item i : itemList) {
             if (i.getName().equalsIgnoreCase(name)) {
                 return i;
             }
@@ -24,8 +22,8 @@ public class Inventory {
     }
 
     public boolean itemIsThere(String name) {
-        if (!myInventory.isEmpty()) {
-            for (Item i : myInventory) {
+        if (!itemList.isEmpty()) {
+            for (Item i : itemList) {
                 if (i.getName().equalsIgnoreCase(name)) {
                     return true;
                 }
@@ -39,14 +37,14 @@ public class Inventory {
         if (itemIsThere(name)) {
             return false; //item already there
         } else {
-            return myInventory.add(newItem);
+            return itemList.add(newItem);
         }
     }
 
     public boolean removeItem(String name) {
-        for (Item i : myInventory) {
+        for (Item i : itemList) {
             if (i.getName().equalsIgnoreCase(name)) {
-                if (myInventory.remove(i)) {
+                if (itemList.remove(i)) {
                     return true;
                 }
             }
@@ -55,16 +53,21 @@ public class Inventory {
     }
 
     public void addItemQuantity(String name, int numNewStock) {
-        for (Item i : myInventory) {
+        for (Item i : itemList) {
             if (i.getName().equalsIgnoreCase(name)) {
                 i.addQuantity(numNewStock);
             }
         }
     }
 
+    public List<Item> getItemList() {
+        return itemList;
+    }
+
+
     public List<Item> getLowStockItems() {
         List<Item> lowStockItems = new ArrayList<>();
-        for (Item i : myInventory) {
+        for (Item i : itemList) {
             if (i.isLowStock()) {
                 lowStockItems.add(i);
             }
@@ -74,3 +77,4 @@ public class Inventory {
 
 
 }
+

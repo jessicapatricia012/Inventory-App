@@ -3,6 +3,7 @@ package ui;
 import model.Inventory;
 import model.Item;
 
+import java.util.List;
 import java.util.Scanner;
 
 public class InventoryApp {
@@ -34,14 +35,16 @@ public class InventoryApp {
 
     private void processCommand(int command) {
         if (command == 1) {
-            doSearchItem();
+            doAllItems();
         } else if (command == 2) {
-            doAddItem();
+            doSearchItem();
         } else if (command == 3) {
-            doRemoveItem();
+            doAddItem();
         } else if (command == 4) {
-            doRestockItem();
+            doRemoveItem();
         } else if (command == 5) {
+            doRestockItem();
+        } else if (command == 6) {
             doLowStockReminder();
         } else {
             System.out.println("Selection not valid...");
@@ -56,19 +59,32 @@ public class InventoryApp {
 
     private void displayMenu() {
         System.out.println("MAIN MENU");
-        System.out.println("\t1 - Search item");
-        System.out.println("\t2 - Add new item");
-        System.out.println("\t3 - Remove item");
-        System.out.println("\t4 - Restock item");
-        System.out.println("\t5 - Low stock reminder");
+        System.out.println("\t1 - All items");
+        System.out.println("\t2 - Search item");
+        System.out.println("\t3 - Add new item");
+        System.out.println("\t4 - Remove item");
+        System.out.println("\t5 - Restock item");
+        System.out.println("\t6 - Low stock reminder");
         System.out.println("\t0 - Close app");
+    }
+
+    private void doAllItems() {
+        if (myInventory.getItemList().isEmpty()) {
+            System.out.println("Inventory is empty.\n");
+        } else {
+            printItemList(myInventory.getItemList());
+        }
     }
 
     private void doSearchItem() {
         String itemName;
         System.out.println("\nEnter the item you are looking for:");
         itemName = input.nextLine();
-
+        if (myInventory.itemIsThere(itemName)) {
+            ;
+        } else {
+            System.out.println("Item not found");
+        }
 
     }
 
@@ -163,11 +179,15 @@ public class InventoryApp {
             System.out.println("No item is low in stock.\n");
         } else {
             System.out.println("Please restock these items:");
-            for (Item i : myInventory.getLowStockItems()) {
-                System.out.println("\tName: " + i.getName());
-                System.out.println("\tQty: " + i.getQuantity());
-                System.out.println("\tMinimum Stock Limit: " + i.getMinimumStockLimit() + "\n");
-            }
+            printItemList(myInventory.getLowStockItems());
+        }
+    }
+
+    private void printItemList(List<Item> items) {
+        for (Item i : items) {
+            System.out.println("\tName: " + i.getName());
+            System.out.println("\tQty: " + i.getQuantity());
+            System.out.println("\tMinimum Stock Limit: " + i.getMinimumStockLimit() + "\n");
         }
     }
 }
