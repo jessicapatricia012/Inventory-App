@@ -1,7 +1,7 @@
 package ui;
 
 import model.Inventory;
-import model.Item;
+import model.InventoryItem;
 
 import java.util.Scanner;
 
@@ -81,7 +81,7 @@ public class InventoryApp {
         if (myInventory.getItemList().isEmpty()) {
             System.out.println("Inventory is empty.\n");
         } else {
-            for (Item i : myInventory.getItemList()) {
+            for (InventoryItem i : myInventory.getItemList()) {
                 printItemInfo(i);
             }
         }
@@ -233,7 +233,7 @@ public class InventoryApp {
             System.out.println("No item is low in stock.\n");
         } else {
             System.out.println("Please restock these items:");
-            for (Item i : myInventory.getLowStockItems()) {
+            for (InventoryItem i : myInventory.getLowStockItems()) {
                 printItemInfo(i);
             }
 
@@ -241,7 +241,7 @@ public class InventoryApp {
     }
 
     // EFFECTS: prints Item i's information to console
-    private void printItemInfo(Item i) {
+    private void printItemInfo(InventoryItem i) {
         System.out.println("\tName: " + i.getName());
         System.out.println("\tQty: " + i.getQuantity());
         System.out.println("\tMinimum Stock Limit: " + i.getMinimumStockLimit() + "\n");

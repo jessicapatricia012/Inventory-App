@@ -68,7 +68,7 @@ class InventoryTest {
         testInventory.getItem("Item 2").setMinimumStockLimit(5);
         testInventory.getItem("Item 3").setMinimumStockLimit(5);
 
-        List<Item> expected = new ArrayList<>();
+        List<InventoryItem> expected = new ArrayList<>();
         expected.add(testInventory.getItem("Item 2"));
         expected.add(testInventory.getItem("Item 3"));
 
