@@ -26,7 +26,7 @@ class InventoryTest {
         assertFalse(testInventory.itemIsThere("item 2"));
         assertFalse(testInventory.itemIsThere("item 3"));
 
-        testAddItem();
+        addItems();
 
         assertTrue(testInventory.itemIsThere("Item 1"));
         assertTrue(testInventory.itemIsThere("Item 2"));

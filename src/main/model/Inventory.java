@@ -14,11 +14,9 @@ public class Inventory {
     //EFFECTS: Returns true if the inventory contains the Item with corresponding name
     //         Returns false if Item is not found
     public boolean itemIsThere(String name) {
-        if (!inventoryItemList.isEmpty()) {
-            for (InventoryItem i : inventoryItemList) {
-                if (i.getName().equalsIgnoreCase(name)) {
-                    return true;
-                }
+        for (InventoryItem i : inventoryItemList) {
+            if (i.getName().equalsIgnoreCase(name)) {
+                return true;
             }
         }
         return false;
@@ -33,6 +31,7 @@ public class Inventory {
             return false; //item already there
         } else {
             return inventoryItemList.add(newInventoryItem);
+
         }
     }
 
