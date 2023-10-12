@@ -39,6 +39,9 @@ class InventoryTest {
         assertTrue(testInventory.addItem("item 1"));
         assertFalse(testInventory.addItem("Item 1"));
         assertTrue(testInventory.addItem("item 2"));
+
+        assertTrue(testInventory.itemIsThere("Item 1"));
+        assertTrue(testInventory.itemIsThere("Item 2"));
     }
 
     @Test
@@ -48,6 +51,8 @@ class InventoryTest {
         assertTrue(testInventory.removeItem("item 1"));
         assertFalse(testInventory.removeItem("item 1"));
         assertFalse(testInventory.removeItem("item 4"));
+
+        assertFalse(testInventory.itemIsThere("item 1"));
     }
 
     @Test

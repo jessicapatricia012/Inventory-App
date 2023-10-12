@@ -305,33 +305,33 @@ public class InventoryAppNew {
     }
 
 
-    // MODIFIES: this, Item myInventory.getItem(itemName)
-    // EFFECTS: restock item based on amount input by user that has to be > 0 , otherwise
-    //          user will be prompted to enter another amount > 0
-    private void doRestockItem() {
-        String itemName;
-        int amount;
-        while (true) {
-            System.out.println("\nEnter the name of the item to be restocked: ");
-            itemName = input.nextLine();
-            if (!myInventory.itemIsThere(itemName)) {
-                System.out.println("\nItem not found.");
-            } else {
-                break;
-            }
-        }
-        while (true) {
-            System.out.println("Enter the number of new stocks coming: ");
-            amount = input.nextInt();
-            if (amount <= 0) {
-                System.out.println("Value has to be greater than 0.");
-            } else {
-                break;
-            }
-        }
-        myInventory.getItem(itemName).addQuantity(amount);
-        System.out.println(itemName + " has been restocked."
-                + "\nQty: " + myInventory.getItem(itemName).getQuantity() + "\n");
-    }
+//    // MODIFIES: this, Item myInventory.getItem(itemName)
+//    // EFFECTS: restock item based on amount input by user that has to be > 0 , otherwise
+//    //          user will be prompted to enter another amount > 0
+//    private void doRestockItem() {
+//        String itemName;
+//        int amount;
+//        while (true) {
+//            System.out.println("\nEnter the name of the item to be restocked: ");
+//            itemName = input.nextLine();
+//            if (!myInventory.itemIsThere(itemName)) {
+//                System.out.println("\nItem not found.");
+//            } else {
+//                break;
+//            }
+//        }
+//        while (true) {
+//            System.out.println("Enter the number of new stocks coming: ");
+//            amount = input.nextInt();
+//            if (amount <= 0) {
+//                System.out.println("Value has to be greater than 0.");
+//            } else {
+//                break;
+//            }
+//        }
+//        myInventory.getItem(itemName).addQuantity(amount);
+//        System.out.println(itemName + " has been restocked."
+//                + "\nQty: " + myInventory.getItem(itemName).getQuantity() + "\n");
+//    }
 
 }
