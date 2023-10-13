@@ -2,19 +2,19 @@ package model;
 
 import java.util.*;
 
-// represents an inventory containing a list of inventory items
+// represents an inventory containing a list of items
 public class Inventory {
-    private List<InventoryItem> inventoryItemList;
+    private List<Item> itemList;
 
     //EFFECTS: construct an empty list of items
     public Inventory() {
-        inventoryItemList = new ArrayList<>();
+        itemList = new ArrayList<>();
     }
 
-    //EFFECTS: Returns true if the inventory contains the Item with corresponding name
-    //         Returns false if Item is not found
+    //EFFECTS: Returns true if the inventory contains the item with corresponding name
+    //         Returns false if item is not found
     public boolean itemIsThere(String name) {
-        for (InventoryItem i : inventoryItemList) {
+        for (Item i : itemList) {
             if (i.getName().equalsIgnoreCase(name)) {
                 return true;
             }
@@ -23,35 +23,34 @@ public class Inventory {
     }
 
     //MODIFIES: this (if Item is not already in the inventory)
-    //EFFECTS: adds Item with given name into the inventory. If Item with the same name exists,
-    //         do nothing and return false. Otherwise, adds Item into the inventory and returns true
+    //EFFECTS: If item with the corresponding name exists, do nothing and return false.
+    //         Otherwise, adds item into itemList and returns true
     public boolean addItem(String name) {
-        InventoryItem newInventoryItem = new InventoryItem(name);
+        Item newItem = new Item(name);
         if (itemIsThere(name)) {
-            return false; //item already there
+            return false;
         } else {
-            return inventoryItemList.add(newInventoryItem);
-
+            return itemList.add(newItem);
         }
     }
 
     //MODIFIES: this (if Item is in the inventory)
-    //EFFECTS: removes Item with corresponding name from the inventory. If Item with the same does not exists,
-    //         do nothing and return false. Otherwise, removes Item from the inventory and returns true
+    //EFFECTS: If Item with the corresponding name does not exist, do nothing and return false.
+    //         Otherwise, removes Item from the inventory (itemList) and returns true
     public boolean removeItem(String name) {
-        for (InventoryItem i : inventoryItemList) {
+        for (Item i : itemList) {
             if (i.getName().equalsIgnoreCase(name)) {
-                return inventoryItemList.remove(i);
+                return itemList.remove(i);
             }
         }
         return false;
     }
 
-    //REQUIRES: Item with corresponding name should be in the inventory
-    //EFFECTS: returns the Item with corresponding name
-    public InventoryItem getItem(String name) {
-        InventoryItem returned = null;
-        for (InventoryItem i : inventoryItemList) {
+    // REQUIRES: Item with corresponding name should be in the inventory
+    // EFFECTS: returns the Item with corresponding name
+    public Item getItem(String name) {
+        Item returned = null;
+        for (Item i : itemList) {
             if (i.getName().equalsIgnoreCase(name)) {
                 returned = i;
             }
@@ -59,19 +58,20 @@ public class Inventory {
         return returned;
     }
 
-    public List<InventoryItem> getItemList() {
-        return inventoryItemList;
+    // EFFECTS: return itemList
+    public List<Item> getItemList() {
+        return itemList;
     }
 
-    //EFFECTS: returns a list of items that are low in stock (
-    public List<InventoryItem> getLowStockItems() {
-        List<InventoryItem> lowStockInventoryItems = new ArrayList<>();
-        for (InventoryItem i : inventoryItemList) {
+    //EFFECTS: returns a list of inventory items that are low in stock
+    public List<Item> getLowStockItems() {
+        List<Item> lowStockItems = new ArrayList<>();
+        for (Item i : itemList) {
             if (i.isLowStock()) {
-                lowStockInventoryItems.add(i);
+                lowStockItems.add(i);
             }
         }
-        return lowStockInventoryItems;
+        return lowStockItems;
     }
 
 

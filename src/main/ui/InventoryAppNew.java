@@ -1,7 +1,7 @@
 package ui;
 
 import model.Inventory;
-import model.InventoryItem;
+import model.Item;
 
 import java.util.Scanner;
 
@@ -16,7 +16,6 @@ public class InventoryAppNew {
         runApp();
     }
 
-    //codes are based on TellerApp
     // MODIFIES: this
     // EFFECTS: processes user input
     private void runApp() {
@@ -27,13 +26,6 @@ public class InventoryAppNew {
         System.out.println("Closing Inventory App...");
     }
 
-    private String command() {
-        String command = input.nextLine();
-
-        return command;
-    }
-
-    // codes are based on TellerApp
     // MODIFIES: this
     // EFFECTS: initializes inventory and Scanner
     private void init() {
@@ -43,47 +35,45 @@ public class InventoryAppNew {
         running = true;
     }
 
-    // EFFECTS: displays main menu to user
+    // EFFECTS: displays main menu to user and takes user input
     private void displayMainMenu() {
         System.out.println("***** MAIN MENU *****");
         System.out.println("\t1 - My Inventory");
         System.out.println("\t2 - Register new shipment");
         System.out.println("\t3 - Low stock warnings");
         System.out.println("\t0 - Close app");
-        processCommandMainMenu(command());
+        processInputMainMenu(input.nextLine());
     }
 
-    //method is based on TellerApp
     //MODIFIES: this
-    //EFFECTS: processes user command
-    private void processCommandMainMenu(String command) {
+    //EFFECTS: processes user's input from "Main Menu"
+    private void processInputMainMenu(String command) {
         if (command.equals("1")) {
             displayMyInventory();
-            processCommandMyInventory(command());
         } else if (command.equals("2")) {
             displayRegisterNewShipment();
-            processCommandRegisterNewShipment(command());
         } else if (command.equals("3")) {
             doLowStockReminder();
         } else if (command.equals("0")) {
             running = false;
         } else {
-            System.out.println("Selection not valid...");
+            System.out.println("Please enter a valid option.");
         }
     }
 
-    // EFFECTS: displays "My Inventory" menu to user
+    // EFFECTS: displays "My Inventory" menu to user and processes user input
     private void displayMyInventory() {
         System.out.println("\n*** MY INVENTORY ***");
         printAllItems();
         System.out.println("\t1 - Look up item");
         System.out.println("\t2 - Add new item");
         System.out.println("\t0 - Back to MAIN MENU");
+        processInputMyInventory(input.nextLine());
     }
 
     //MODIFIES: this
-    //EFFECTS: processes user command from "My Inventory" menu
-    private void processCommandMyInventory(String command) {
+    //EFFECTS: processes user's input from "My Inventory" menu
+    private void processInputMyInventory(String command) {
         if (command.equals("1")) {
             doLookUpItem();
         } else if (command.equals("2")) {
@@ -91,21 +81,22 @@ public class InventoryAppNew {
         } else if (command.equals("0")) {
             ;
         } else {
-            System.out.println("Selection not valid...");
+            System.out.println("Please enter a valid option.");
         }
     }
 
-    // EFFECTS: displays "My Inventory" menu to user
+    // EFFECTS: displays "Register New Shipment" menu to user and processes user's input
     private void displayRegisterNewShipment() {
         System.out.println("\n*** REGISTER NEW SHIPMENT ***");
         System.out.println("\t1 - Receive items");
         System.out.println("\t2 - Ship out items");
         System.out.println("\t0 - Back to MAIN MENU");
+        processInputRegisterNewShipment(input.nextLine());
     }
 
     //MODIFIES: this
-    //EFFECTS: processes user command from "My Inventory" menu
-    private void processCommandRegisterNewShipment(String command) {
+    //EFFECTS: processes user's input from "Register New Shipment" menu
+    private void processInputRegisterNewShipment(String command) {
         if (command.equals("1")) {
             doReceiveItems();
         } else if (command.equals("2")) {
@@ -113,7 +104,7 @@ public class InventoryAppNew {
         } else if (command.equals("0")) {
             ;
         } else {
-            System.out.println("Selection not valid...");
+            System.out.println("Please enter a valid option.");
         }
     }
 
@@ -123,30 +114,37 @@ public class InventoryAppNew {
         if (myInventory.getItemList().isEmpty()) {
             System.out.println("Inventory is empty.\n");
         } else {
-            for (InventoryItem i : myInventory.getItemList()) {
+            for (Item i : myInventory.getItemList()) {
                 printItemInfo(i);
             }
         }
     }
 
+    // EFFECTS: displays the item with its information that the user is searching for (by name)
+    //          If item is not found, prints out a statement that says so.
     private void doLookUpItem() {
         String itemName;
         System.out.println("Enter the item you are looking for: ");
-        itemName = input.nextLine();
+        itemName = input.nextLine().toUpperCase();
         if (!myInventory.itemIsThere(itemName)) {
-            System.out.println("Item not found.\n");
+            System.out.println("Item " + itemName + " not found.\n");
         } else {
             printItemInfo(myInventory.getItem(itemName));
-            System.out.println("\t1 - Edit info");
-            System.out.println("\t2 - Delete item");
-            System.out.println("\t0 - Back to MAIN MENU");
-            processCommandLookUpItem(itemName, command());
+            displayEditOrDeleteItem(itemName);
         }
     }
 
-    private void processCommandLookUpItem(String itemName, String command) {
+    // EFFECTS: displays "Edit or Delete Item" menu to user and processes user's input
+    private void displayEditOrDeleteItem(String itemName) {
+        System.out.println("\t1 - Edit item");
+        System.out.println("\t2 - Delete item");
+        System.out.println("\t0 - Back to MAIN MENU");
+        processInputEditOrDeleteItem(itemName, input.nextLine());
+    }
+
+    private void processInputEditOrDeleteItem(String itemName, String command) {
         if (command.equals("1")) {
-            doEditItem(itemName);
+            displayEditItem(itemName);
         } else if (command.equals("2")) {
             doDeleteItem(itemName);
         } else if (command.equals("0")) {
@@ -158,48 +156,45 @@ public class InventoryAppNew {
     }
 
     // MODIFIES: this
-    // EFFECTS: displays the information of the item that the user searched for (by name) and provides the user
-    //          with options to edit the information related to the item.
-    private void doEditItem(String itemName) {
-        System.out.println("\nSelect item info to be edited:");
-        System.out.println("\t1 - Quantity");
-        System.out.println("\t2 - Minimum stock limit");
-        System.out.println("\n\t0 - Back to MY INVENTORY");
-        processEditItemCommand(itemName, command());
+    // EFFECTS: displays "Edit Item" menu to user and processes user's input
+    private void displayEditItem(String itemName) {
+        System.out.println("\t1 - Edit quantity");
+        System.out.println("\t2 - Edit minimum stock limit");
+        System.out.println("\t0 - Back to MY INVENTORY");
+        processEditItemCommand(itemName, input.nextLine());
     }
 
     //MODIFIES: this
-    //EFFECTS: processes user command from "Search and edit item info" menu
+    //EFFECTS: processes user command from "Edit item" menu
     private void processEditItemCommand(String itemName, String command) {
         if (command.equals("1")) {
             setQuantity(itemName);
         } else if (command.equals("2")) {
             setMinimumStockLimit(itemName);
-        } else if (command.equals("3")) {
+        } else if (command.equals("0")) {
             displayMyInventory();
         } else {
-            System.out.println("Selection not valid...");
+            System.out.println("Please enter a valid option.");
         }
     }
 
     // MODIFIES: this
-    // EFFECTS: remove item entered by user from inventory.
-    //          If item does not exist, prints out a statement that says so.
+    // EFFECTS: removes item entered by user from inventory.
     private void doDeleteItem(String itemName) {
         myInventory.removeItem(itemName);
-        System.out.println(itemName + " and related information has been deleted.\n");
+        System.out.println(itemName.toUpperCase() + " and its related information has been deleted.\n");
     }
 
     // MODIFIES: this
-    // EFFECTS: add new Item and its info into myInventory.
+    // EFFECTS: adds new Item into myInventory.
     //          If Item already exist, prints out a statement that says so.
     private void doAddNewItem() {
         String itemName;
 
         System.out.println("\nEnter the name of the item to be added:");
-        itemName = input.nextLine();
+        itemName = input.nextLine().toUpperCase();
         if (myInventory.addItem(itemName)) {
-            System.out.println("A new item has been registered in the inventory.");
+            System.out.println("A new item " + itemName + " has been registered in the inventory.");
             setMinimumStockLimit(itemName);
         } else {
             System.out.println(itemName + " is already registered in the inventory.\n");
@@ -215,10 +210,10 @@ public class InventoryAppNew {
             int qty = input.nextInt();
             input.nextLine();
             if (qty < 0) {
-                System.out.println("Value should be greater or equal to 0.\n");
+                System.out.println("Quantity should be greater or equal to 0.\n");
             } else {
                 myInventory.getItem(itemName).setQuantity(qty);
-                System.out.println(itemName + " quantity updated.\n");
+                System.out.println(itemName + "'s quantity has been updated.\n");
                 break;
             }
         }
@@ -233,19 +228,21 @@ public class InventoryAppNew {
             int minStock = input.nextInt();
             input.nextLine();
             if (minStock < 0) {
-                System.out.println("Value should be greater or equal to 0.\n");
+                System.out.println("Minimum stock limit should be greater or equal to 0.\n");
             } else {
                 myInventory.getItem(itemName).setMinimumStockLimit(minStock);
-                System.out.println(itemName + " minimum stock limit has been set.\n");
+                System.out.println(itemName + "'s minimum stock limit has been set.\n");
                 break;
             }
         }
     }
 
+    // MODIFIES: this
+    // EFFECTS: process item being shipped into the inventory.
     private void doReceiveItems() {
         while (true) {
             System.out.println("Enter the item being received");
-            String itemName = input.nextLine();
+            String itemName = input.nextLine().toUpperCase();
             System.out.println("Enter item quantity. Please enter an integer: ");
             int qty = input.nextInt();
             input.nextLine();
@@ -253,7 +250,7 @@ public class InventoryAppNew {
                 System.out.println("Quantity has to be greater than 0");
             } else {
                 if (myInventory.addItem(itemName)) {
-                    System.out.println("A new item has been registered in the inventory.");
+                    System.out.println("A new item " + itemName + " has been registered in the inventory.");
                     setMinimumStockLimit(itemName);
                 }
                 myInventory.getItem(itemName).addQuantity(qty);
@@ -262,6 +259,8 @@ public class InventoryAppNew {
         }
     }
 
+    // MODIFIES: this
+    // EFFECTS: process item being shipped out of the inventory.
     private void doShipOutItems() {
         while (true) {
             System.out.println("Enter the item being shipped out:");
@@ -272,14 +271,15 @@ public class InventoryAppNew {
                 input.nextLine();
                 if (qty <= myInventory.getItem(itemName).getQuantity()) {
                     myInventory.getItem(itemName).subtractQuantity(qty);
-                    break;
                 } else if (qty <= 0) {
                     System.out.println("Quantity has to be greater than 0");
+                    break;
                 } else {
                     System.out.println("Insufficient stock.\n");
+                    break;
                 }
             } else {
-                System.out.println("Item not found.\n");
+                System.out.println("Item " + itemName + " is not found.\n");
                 break;
             }
         }
@@ -291,46 +291,17 @@ public class InventoryAppNew {
             System.out.println("No item is low in stock.\n");
         } else {
             System.out.println("Please restock these items:");
-            for (InventoryItem i : myInventory.getLowStockItems()) {
+            for (Item i : myInventory.getLowStockItems()) {
                 printItemInfo(i);
             }
         }
     }
 
-    // EFFECTS: prints Item i's information to console
-    private void printItemInfo(InventoryItem i) {
+    // EFFECTS: prints Item i's name, quantity, and minimum stock limit to console
+    private void printItemInfo(Item i) {
         System.out.println("\tName: " + i.getName());
         System.out.println("\tQty: " + i.getQuantity());
         System.out.println("\tMinimum Stock Limit: " + i.getMinimumStockLimit() + "\n");
     }
-
-//    // MODIFIES: this, Item myInventory.getItem(itemName)
-//    // EFFECTS: restock item based on amount input by user that has to be > 0 , otherwise
-//    //          user will be prompted to enter another amount > 0
-//    private void doRestockItem() {
-//        String itemName;
-//        int amount;
-//        while (true) {
-//            System.out.println("\nEnter the name of the item to be restocked: ");
-//            itemName = input.nextLine();
-//            if (!myInventory.itemIsThere(itemName)) {
-//                System.out.println("\nItem not found.");
-//            } else {
-//                break;
-//            }
-//        }
-//        while (true) {
-//            System.out.println("Enter the number of new stocks coming: ");
-//            amount = input.nextInt();
-//            if (amount <= 0) {
-//                System.out.println("Value has to be greater than 0.");
-//            } else {
-//                break;
-//            }
-//        }
-//        myInventory.getItem(itemName).addQuantity(amount);
-//        System.out.println(itemName + " has been restocked."
-//                + "\nQty: " + myInventory.getItem(itemName).getQuantity() + "\n");
-//    }
 
 }
