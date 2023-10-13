@@ -46,7 +46,7 @@ public class Inventory {
         return false;
     }
 
-    // REQUIRES: Item with corresponding name should be in the inventory
+    // REQUIRES: itemIsThere(name) == TRUE
     // EFFECTS: returns the Item with corresponding name
     public Item getItem(String name) {
         Item returned = null;

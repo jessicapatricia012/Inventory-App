@@ -1,6 +1,6 @@
 package model;
 
-//represents an item having a name, quantity, and minimum stock limit
+// represents an item having a name, quantity, and minimum stock limit
 public class Item {
     private String name;
     private int quantity;
