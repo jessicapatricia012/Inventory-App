@@ -2,17 +2,25 @@ package ui;
 
 import model.Inventory;
 import model.Item;
+import persistence.JsonReader;
+import persistence.JsonWriter;
 
+import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.util.Scanner;
 
 // Inventory application that lets user keeps track of items inside their inventory
-public class InventoryAppNew {
+public class InventoryApp {
+    private static final String JSON_STORE = "./data/inventory.json";
+
     private Inventory myInventory;
     private Scanner input;
     private boolean running;
+    private JsonWriter jsonWriter;
+    private JsonReader jsonReader;
 
     //EFFECTS: run the app
-    public InventoryAppNew() {
+    public InventoryApp() throws FileNotFoundException {
         runApp();
     }
 
@@ -30,6 +38,8 @@ public class InventoryAppNew {
     // MODIFIES: this
     // EFFECTS: initializes inventory and Scanner
     private void init() {
+        jsonWriter = new JsonWriter(JSON_STORE);
+        jsonReader = new JsonReader(JSON_STORE);
         myInventory = new Inventory();
         input = new Scanner(System.in);
         input.useDelimiter("\n");
@@ -42,6 +52,8 @@ public class InventoryAppNew {
         System.out.println("\t1 - My Inventory");
         System.out.println("\t2 - Register new shipment");
         System.out.println("\t3 - Low stock warnings");
+        System.out.println("\t4 - Save inventory");
+        System.out.println("\t5 - Load inventory");
         System.out.println("\t0 - Close app");
     }
 
@@ -56,6 +68,10 @@ public class InventoryAppNew {
             processInputRegisterNewShipment(input.nextLine());
         } else if (command.equals("3")) {
             doLowStockReminder();
+        } else if (command.equals("4")) {
+            saveInventory();
+        } else if (command.equals("5")) {
+            loadInventory();
         } else if (command.equals("0")) {
             running = false;
         } else {
@@ -262,7 +278,7 @@ public class InventoryAppNew {
                 System.out.println("A new item " + itemName + " has been registered in the inventory.");
                 setMinimumStockLimit(itemName);
             } else {
-                System.out.println("Item " + itemName + " stock has been updated.\n");
+                System.out.println(itemName + "'s stock has been updated.\n");
             }
             myInventory.getItem(itemName).addQuantity(qty);
         }
@@ -281,7 +297,7 @@ public class InventoryAppNew {
             input.nextLine();
             if (0 < qty && qty <= myInventory.getItem(itemName).getQuantity()) {
                 myInventory.getItem(itemName).subtractQuantity(qty);
-                System.out.println("Item " + itemName + " stock has been updated.\n");
+                System.out.println(itemName + "'s stock has been updated.\n");
             } else if (qty <= 0) {
                 System.out.println("Quantity has to be greater than 0");
             } else {
@@ -311,4 +327,27 @@ public class InventoryAppNew {
         System.out.println("\tMinimum Stock Limit: " + i.getMinimumStockLimit() + "\n");
     }
 
+
+    // EFFECTS: saves the inventory to file
+    private void saveInventory() {
+        try {
+            jsonWriter.open();
+            jsonWriter.write(myInventory);
+            jsonWriter.close();
+            System.out.println("Saved inventory to " + JSON_STORE);
+        } catch (FileNotFoundException e) {
+            System.out.println("Unable to write to file to " + JSON_STORE);
+        }
+    }
+
+    // MODIFIES: this
+    // EFFECTS: loads inventory from file
+    private void loadInventory() {
+        try {
+            myInventory = jsonReader.read();
+            System.out.println("Loaded inventory from " + JSON_STORE);
+        } catch (IOException e) {
+            System.out.println("Unable to read from file from " + JSON_STORE);
+        }
+    }
 }

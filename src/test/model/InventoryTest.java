@@ -8,7 +8,7 @@ import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 
 class InventoryTest {
-    Inventory testInventory;
+    private Inventory testInventory;
 
     @BeforeEach
     public void runBefore() {

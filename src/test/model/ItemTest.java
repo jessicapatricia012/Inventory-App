@@ -6,7 +6,7 @@ import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 
 public class ItemTest {
-    Item testItem;
+    private Item testItem;
 
     @BeforeEach
     public void runBefore() {

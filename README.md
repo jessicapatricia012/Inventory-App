@@ -16,4 +16,6 @@ an item is received or shipped out of the storage/warehouse.
 -  As a user, I want to be able to be able to check the items that has low stock
 -  As a user, I want to be informed when a new item that is not yet registered in the inventory is received, 
    and register that new item.
--  As a user, I want to be informed when an item does not have enough stock to be shipped out
+-  As a user, I want to be informed when an item does not have enough stock to be shipped out.
+-  As a user, I want to have the options to save the list of items I have in my inventory.
+-  As a user, I want to be able to load my inventory from file

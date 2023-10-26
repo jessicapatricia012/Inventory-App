@@ -1,7 +1,10 @@
 package model;
 
+import org.json.JSONObject;
+import persistence.Writable;
+
 // represents an item having a name, quantity, and minimum stock limit
-public class Item {
+public class Item implements Writable {
     private String name;
     private int quantity;
     private int minimumStockLimit;
@@ -58,6 +61,15 @@ public class Item {
 
     public int getMinimumStockLimit() {
         return minimumStockLimit;
+    }
+
+    @Override
+    public JSONObject toJson() {
+        JSONObject json = new JSONObject();
+        json.put("Name", name);
+        json.put("Quantity", quantity);
+        json.put("Minimum Stock Limit", minimumStockLimit);
+        return json;
     }
 
 }
