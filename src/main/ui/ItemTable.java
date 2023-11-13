@@ -11,58 +11,76 @@ import java.sql.Array;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ItemTable extends JScrollPane {
-    private static final int WIDTH = 300;
+public class ItemTable extends JPanel {
+    private static final int WIDTH = 800;
     private static final int HEIGHT = 600;
+    private static final int NUM_COLS = 3;
 
     private JTable table;
+    private JScrollPane scrollPane;
     private String[] cols;
     private String[][] data;
     private DefaultTableModel model;
-    private Inventory myInventory;
+    private SwingInventoryApp sia;
 
 
-    public ItemTable(Inventory myInventory) {
+    public ItemTable(SwingInventoryApp sia) {
+        this.sia = sia;
+        setSize(WIDTH, HEIGHT);
+        setVisible(true);
+        setLayout(null);
+
+        //display();
         cols = new String[]{"Item", "Quantity", "Min. Stock Limit"};
-        data = getdata();
+        data = new String[sia.getMyInventory().getItemList().size() + 1][NUM_COLS];
+        data = getData();
         table = new JTable(data, cols);
-        this.myInventory = myInventory;
+        scrollPane = new JScrollPane(table);
+        add(scrollPane);
+        //model = new DefaultTableModel(data, cols);
+        //setUp();
 
 
-        setUp();
-        display();
     }
 
-    private String[][] getdata() {
+    private String[][] getData() {
         List<String> rows = new ArrayList<>();
         int row = 0;
-        for (Item i : myInventory.getItemList()) {
-            data[row][0] = (i.getName());
-            data[row][1] = String.valueOf(i.getQuantity());
-            data[row][2] = String.valueOf(i.getMinimumStockLimit());
-            row++;
+
+        data[0][0] = "a";
+        data[0][1] = "b";
+        data[0][2] = "c";
+
+        if (!sia.getMyInventory().getItemList().isEmpty()) {
+            for (Item i : sia.getMyInventory().getItemList()) {
+                data[row][0] = (i.getName());
+                data[row][1] = String.valueOf(i.getQuantity());
+                data[row][2] = String.valueOf(i.getMinimumStockLimit());
+                row++;
+            }
         }
+
+
         return data;
     }
 
     public void setUp() {
-        model.setColumnIdentifiers(cols);
-        table.setModel(model);
-        table.setBackground(Color.GREEN);
-        table.setGridColor(Color.BLACK);
+        //model.setColumnIdentifiers(cols);
+        //table.setModel(model);
+//        table.setBackground(Color.GREEN);
+//        table.setGridColor(Color.BLACK);
 
-        setBackground(Color.BLUE);
-        setVisible(true);
-        setBounds(800, 0, WIDTH, HEIGHT);
-        add(table);
+        scrollPane.setBackground(Color.BLUE);
+        //scrollPane.setVisible(true);
+        scrollPane.setBounds(800, 0, WIDTH, HEIGHT);
+        //scrollPane.add(table);
 
     }
 
-    public void display() {
-        if (myInventory.getItemList().isEmpty()) {
-            System.out.println("Inventory is empty.\n");
-        } else {
+//    public void display() {
+//        sia.getLayeredPane().add(scrollPane);
+//
+//    }
 
-        }
-    }
+
 }

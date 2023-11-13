@@ -124,7 +124,7 @@
 //        myInventoryPanel = new JPanel();
 //        itemListPanel = new JPanel();
 //
-//        itemTable = new ItemTable(myInventory);
+//        itemTable = new ItemTable(this);
 //
 //    }
 //

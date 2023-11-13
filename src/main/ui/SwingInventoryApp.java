@@ -19,7 +19,7 @@ import java.util.Scanner;
 public class SwingInventoryApp extends JFrame implements ActionListener {
     private static final String JSON_STORE = "./data/inventory.json";
 
-    private static final int WIDTH = 1100;
+    private static final int WIDTH = 800;
     private static final int HEIGHT = 600;
 
     private Inventory myInventory;
@@ -35,7 +35,7 @@ public class SwingInventoryApp extends JFrame implements ActionListener {
 
     private JLabel mainMenuLabel;
 
-    //private MainMenu mainMenu;
+    private MainMenu mainMenu;
 
     private JMenuBar menuBar;
     private JMenu fileMenu;
@@ -59,20 +59,26 @@ public class SwingInventoryApp extends JFrame implements ActionListener {
 
         setUpJFrame();
         setUpMenuBar();
+        setJMenuBar(menuBar);
+
 
         displayMainMenu();
 
-//        setUpMainMenuPanel();
-//        setUpMyInventoryPanel();
-        //setUpItemListPanel();
-//        layeredPane.add(mainMenuPanel, new Integer(0));
-        layeredPane.add(itemTable, new Integer(2));
 
 
     }
 
-    private void displayMainMenu() {
-        layeredPane.add(new MainMenu(layeredPane));
+    public void displayMainMenu() {
+        layeredPane.add(mainMenu, new Integer(0));
+        //add(itemTable);
+
+    }
+
+    public void displayItemList() {
+        //layeredPane.remove(mainMenu);
+        //itemTable.display();
+        layeredPane.add(itemTable);
+
     }
 
     // MODIFIES: this
@@ -90,13 +96,8 @@ public class SwingInventoryApp extends JFrame implements ActionListener {
         loadItem = new JMenuItem("Load");
         saveItem = new JMenuItem("Save");
         layeredPane = new JLayeredPane();
-
-
-//        mainMenuPanel = new JPanel();
-//        myInventoryPanel = new JPanel();
-        //itemListPanel = new JPanel();
-//
-        itemTable = new ItemTable(myInventory);
+        mainMenu = new MainMenu(this);
+        itemTable = new ItemTable(this);
 
     }
 
@@ -104,8 +105,9 @@ public class SwingInventoryApp extends JFrame implements ActionListener {
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setSize(WIDTH, HEIGHT);
         setVisible(true);
-        layeredPane.setBounds(0, 0, WIDTH, HEIGHT);
+        layeredPane.setBounds(0, 0, 800, HEIGHT);
         add(layeredPane);
+
     }
 
     private void setUpMenuBar() {
@@ -121,20 +123,6 @@ public class SwingInventoryApp extends JFrame implements ActionListener {
         saveItem.addActionListener(this);
     }
 
-    private void setUpButton(JButton b, String name) {
-        //b.setBounds(200, 100, 400, 50);
-        b.setSize(400, 50);
-        b.setText(name);
-        b.setFocusable(false);
-        b.addActionListener(this);
-    }
-
-    private void setUpPanel(JPanel p) {
-        p.setSize(800, HEIGHT);
-        p.setVisible(true);
-        p.setLayout(null);
-
-    }
 
 //    private void setUpMainMenuPanel() {
 //        setUpPanel(mainMenuPanel);
@@ -193,6 +181,8 @@ public class SwingInventoryApp extends JFrame implements ActionListener {
     private void loadInventory() {
         try {
             myInventory = jsonReader.read();
+            itemTable = new ItemTable(this);
+
             System.out.println("Loaded inventory from " + JSON_STORE);
         } catch (IOException e) {
             System.out.println("Unable to read from file from " + JSON_STORE);
@@ -203,9 +193,19 @@ public class SwingInventoryApp extends JFrame implements ActionListener {
     public void actionPerformed(ActionEvent e) {
         if (e.getSource() == loadItem) {
             loadInventory();
+
         } else if (e.getSource() == saveItem) {
             saveInventory();
         }
+    }
+
+    public Inventory getMyInventory() {
+        return myInventory;
+    }
+
+    @Override
+    public JLayeredPane getLayeredPane() {
+        return layeredPane;
     }
 }
 
