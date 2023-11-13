@@ -5,13 +5,18 @@ import model.Item;
 import persistence.JsonReader;
 import persistence.JsonWriter;
 
+import javax.swing.*;
+import java.awt.event.ActionListener;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.Scanner;
 
 // Inventory application that lets user keeps track of items inside their inventory
-public class InventoryApp {
+public class InventoryApp extends JFrame {
     private static final String JSON_STORE = "./data/inventory.json";
+
+    private static final int WIDTH = 800;
+    private static final int HEIGHT = 600;
 
     private Inventory myInventory;
     private Scanner input;
@@ -19,8 +24,19 @@ public class InventoryApp {
     private JsonWriter jsonWriter;
     private JsonReader jsonReader;
 
+    private JButton button;
+
     //EFFECTS: run the app
     public InventoryApp() throws FileNotFoundException {
+        super("Inventory App");
+
+        setDefaultCloseOperation(EXIT_ON_CLOSE);
+        setSize(WIDTH, HEIGHT);
+        setVisible(true);
+        //setResizable(true);
+
+
+
         runApp();
     }
 
