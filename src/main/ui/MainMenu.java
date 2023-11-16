@@ -106,7 +106,6 @@ public class MainMenu extends JPanel implements ActionListener {
             inventoryApp.getMyInventory().getItem(itemName).addQuantity(itemQuantity);
             checkLowStock(itemName);
         }
-        inventoryApp.refreshItemList();
     }
 
     // MODIFIES: this, myInventory.getItem(itemName)
@@ -131,7 +130,6 @@ public class MainMenu extends JPanel implements ActionListener {
         } else {
             JOptionPane.showMessageDialog(null, "Item " + itemName + " is not found.");
         }
-        inventoryApp.refreshItemList();
     }
 
     private void checkLowStock(String itemName) {
