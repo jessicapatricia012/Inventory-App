@@ -1,64 +1,50 @@
 package ui;
 
-import model.Item;
-
 import javax.swing.*;
+import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.ArrayList;
+import java.util.List;
 
 public class MainMenu extends JPanel implements ActionListener {
-    private static final int WIDTH = 800;
+    private static final int WIDTH = 200;
     private static final int HEIGHT = 600;
 
     private JLabel mainMenuLabel;
+    private List<JButton> buttons;
     private JButton itemListButton;
     private JButton receiveItemsButton;
     private JButton shipItemsOutButton;
-    private JButton lowStockWarningsButton;
-    private SwingInventoryApp sia;
+    private JButton lowInStockButton;
 
-    public MainMenu(SwingInventoryApp sia) {
-        this.sia = sia;
+    private InventoryAppGUI inventoryApp;
+
+    public MainMenu(InventoryAppGUI inventoryApp) {
+        this.inventoryApp = inventoryApp;
 
         mainMenuLabel = new JLabel("Main Menu");
+        buttons = new ArrayList<>();
         itemListButton = new JButton("Item List");
         receiveItemsButton = new JButton("Receive Items");
         shipItemsOutButton = new JButton("Ship Items Out");
-        lowStockWarningsButton = new JButton("Low Stock Warnings");
+        lowInStockButton = new JButton("Low In Stock");
+
         setUp();
     }
 
     public void setUp() {
         setSize(WIDTH, HEIGHT);
-        setVisible(true);
-        setLayout(null);
-
-        setUpButtons();
-        add(itemListButton);
-        add(receiveItemsButton);
-        add(shipItemsOutButton);
-        add(lowStockWarningsButton);
+        setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
 
         setUpLabel();
         add(mainMenuLabel);
 
-    }
-
-    public void setUpButtons() {
-        itemListButton.setBounds(200, 100, 400, 50);
-        receiveItemsButton.setBounds(200, 190, 400, 50);
-        shipItemsOutButton.setBounds(200, 250, 400, 50);
-        lowStockWarningsButton.setBounds(200, 400, 400, 50);
-
-        itemListButton.setFocusable(false);
-        receiveItemsButton.setFocusable(false);
-        shipItemsOutButton.setFocusable(false);
-        lowStockWarningsButton.setFocusable(false);
-
-        itemListButton.addActionListener(this);
-        receiveItemsButton.addActionListener(this);
-        shipItemsOutButton.addActionListener(this);
-        lowStockWarningsButton.addActionListener(this);
+        setUpButtons();
+        for (JButton b : buttons) {
+            add(b);
+        }
+        setVisible(true);
     }
 
     public void setUpLabel() {
@@ -66,6 +52,25 @@ public class MainMenu extends JPanel implements ActionListener {
         mainMenuLabel.setVerticalAlignment(JLabel.TOP);
         mainMenuLabel.setBounds(0, 10, 800, 50);
     }
+
+    public void setUpButtons() {
+        buttons.add(itemListButton);
+        buttons.add(receiveItemsButton);
+        buttons.add(shipItemsOutButton);
+        buttons.add(lowInStockButton);
+
+//        itemListButton.setSize(400, 50);
+//        receiveItemsButton.setBounds(200, 190, 400, 50);
+//        shipItemsOutButton.setBounds(200, 250, 400, 50);
+//        lowInStockButton.setBounds(200, 400, 400, 50);
+
+        for (JButton b : buttons) {
+            b.setSize(new Dimension(400, 50));
+            b.setFocusable(false);
+            b.addActionListener(this);
+        }
+    }
+
 
     private void doSetMinimumStockLimit(String itemName) {
         int minStockLimit = Integer.parseInt(JOptionPane.showInputDialog("Enter item minimum stock limit: "));
@@ -75,10 +80,9 @@ public class MainMenu extends JPanel implements ActionListener {
                     "ERROR", JOptionPane.ERROR_MESSAGE);
             minStockLimit = Integer.parseInt(JOptionPane.showInputDialog("Enter item minimum stock limit: "));
         }
-        sia.getMyInventory().getItem(itemName).setMinimumStockLimit(minStockLimit);
+        inventoryApp.getMyInventory().getItem(itemName).setMinimumStockLimit(minStockLimit);
         JOptionPane.showMessageDialog(null, itemName
                 + "'s minimum stock limit has been set.");
-        checkLowStock(itemName);
     }
 
 
@@ -91,7 +95,7 @@ public class MainMenu extends JPanel implements ActionListener {
             JOptionPane.showMessageDialog(null, "Quantity has to be greater than 0",
                     "ERROR", JOptionPane.ERROR_MESSAGE);
         } else {
-            if (sia.getMyInventory().addItem(itemName)) {
+            if (inventoryApp.getMyInventory().addItem(itemName)) {
                 JOptionPane.showMessageDialog(null,
                         "A new item " + itemName + " has been registered in the inventory.");
 
@@ -99,9 +103,10 @@ public class MainMenu extends JPanel implements ActionListener {
             } else {
                 JOptionPane.showMessageDialog(null, itemName + "'s stock has been updated.");
             }
-            sia.getMyInventory().getItem(itemName).addQuantity(itemQuantity);
+            inventoryApp.getMyInventory().getItem(itemName).addQuantity(itemQuantity);
+            checkLowStock(itemName);
         }
-
+        inventoryApp.refreshItemList();
     }
 
     // MODIFIES: this, myInventory.getItem(itemName)
@@ -111,11 +116,11 @@ public class MainMenu extends JPanel implements ActionListener {
     private void doShipItemsOut() {
         String itemName = JOptionPane.showInputDialog("Enter the item being shipped out:").toUpperCase();
 
-        if (sia.getMyInventory().itemIsThere(itemName)) {
+        if (inventoryApp.getMyInventory().itemIsThere(itemName)) {
             int itemQuantity = Integer.parseInt(JOptionPane.showInputDialog("Item quantity:"));
 
-            if (0 < itemQuantity && itemQuantity <= sia.getMyInventory().getItem(itemName).getQuantity()) {
-                sia.getMyInventory().getItem(itemName).subtractQuantity(itemQuantity);
+            if (0 < itemQuantity && itemQuantity <= inventoryApp.getMyInventory().getItem(itemName).getQuantity()) {
+                inventoryApp.getMyInventory().getItem(itemName).subtractQuantity(itemQuantity);
                 JOptionPane.showMessageDialog(null, itemName + "'s stock has been updated.");
                 checkLowStock(itemName);
             } else if (itemQuantity <= 0) {
@@ -126,39 +131,33 @@ public class MainMenu extends JPanel implements ActionListener {
         } else {
             JOptionPane.showMessageDialog(null, "Item " + itemName + " is not found.");
         }
+        inventoryApp.refreshItemList();
     }
 
     private void checkLowStock(String itemName) {
-        if (sia.getMyInventory().getItem(itemName).isLowStock()) {
+        if (inventoryApp.getMyInventory().getItem(itemName).isLowStock()) {
             JOptionPane.showMessageDialog(null, "Item " + itemName + " is low in stock.");
         }
     }
 
-
     private void doLowStockWarnings() {
-        if (sia.getMyInventory().getLowStockItems().isEmpty()) {
+        if (inventoryApp.getMyInventory().getLowStockItems().isEmpty()) {
             JOptionPane.showMessageDialog(null, "No item is low in stock.");
         } else {
-//            System.out.println("Please restock these items:");
-//            for (Item i : sia.getMyInventory().getLowStockItems()) {
-//                printItemInfo(i);
-//            }
+            inventoryApp.displayLowStockWarnings();
         }
     }
-
 
     @Override
     public void actionPerformed(ActionEvent e) {
         if (e.getSource() == itemListButton) {
-            sia.displayItemList();
+            inventoryApp.displayItemList();
         } else if (e.getSource() == receiveItemsButton) {
             doReceiveItems();
         } else if (e.getSource() == shipItemsOutButton) {
             doShipItemsOut();
-        } else if (e.getSource() == lowStockWarningsButton) {
+        } else if (e.getSource() == lowInStockButton) {
             doLowStockWarnings();
         }
     }
-
-
 }
