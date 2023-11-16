@@ -28,8 +28,6 @@ public class InventoryAppGUI extends JFrame implements ActionListener {
     private JMenuItem loadItem;
     private JMenuItem saveItem;
 
-
-
     //EFFECTS: run the app
     public InventoryAppGUI() throws FileNotFoundException {
         super("Inventory App");
@@ -46,10 +44,7 @@ public class InventoryAppGUI extends JFrame implements ActionListener {
         setUpMenuBar();
         setJMenuBar(menuBar);
 
-
         displayMainMenu();
-        //displayItemList();
-
     }
 
     // MODIFIES: this
@@ -64,7 +59,6 @@ public class InventoryAppGUI extends JFrame implements ActionListener {
         loadItem = new JMenuItem("Load");
         saveItem = new JMenuItem("Save");
     }
-
 
     private void setUpJFrame() {
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -92,11 +86,6 @@ public class InventoryAppGUI extends JFrame implements ActionListener {
 
     public void displayItemList() {
         new AllItemsWindow(this);
-    }
-
-    public void refreshItemList() {
-        // STUB
-
     }
 
     public void displayLowStockWarnings() {
