@@ -13,7 +13,7 @@ public class MainMenu extends JPanel implements ActionListener {
 
     private JLabel mainMenuLabel;
     private List<JButton> buttons;
-    private JButton itemListButton;
+    private JButton allItemsButton;
     private JButton receiveItemsButton;
     private JButton shipItemsOutButton;
     private JButton lowInStockButton;
@@ -25,7 +25,7 @@ public class MainMenu extends JPanel implements ActionListener {
 
         mainMenuLabel = new JLabel("Main Menu");
         buttons = new ArrayList<>();
-        itemListButton = new JButton("Item List");
+        allItemsButton = new JButton("All Items");
         receiveItemsButton = new JButton("Receive Items");
         shipItemsOutButton = new JButton("Ship Items Out");
         lowInStockButton = new JButton("Low In Stock");
@@ -54,7 +54,7 @@ public class MainMenu extends JPanel implements ActionListener {
     }
 
     public void setUpButtons() {
-        buttons.add(itemListButton);
+        buttons.add(allItemsButton);
         buttons.add(receiveItemsButton);
         buttons.add(shipItemsOutButton);
         buttons.add(lowInStockButton);
@@ -150,7 +150,7 @@ public class MainMenu extends JPanel implements ActionListener {
 
     @Override
     public void actionPerformed(ActionEvent e) {
-        if (e.getSource() == itemListButton) {
+        if (e.getSource() == allItemsButton) {
             inventoryApp.displayItemList();
         } else if (e.getSource() == receiveItemsButton) {
             doReceiveItems();

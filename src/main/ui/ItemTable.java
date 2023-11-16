@@ -1,94 +1,70 @@
 package ui;
 
-
-import model.Item;
-
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableRowSorter;
 
-public class ItemTable extends JPanel {
-    private static final int WIDTH = 800;
-    private static final int HEIGHT = 600;
+public abstract class ItemTable extends JTable {
     private static final int NUM_COLS = 3;
+
+    protected InventoryAppGUI inventoryApp;
 
     private JTable table;
     private JScrollPane scrollPane;
     private String[] cols;
-    private String[][] data;
+    protected Object[][] data;
+
     private DefaultTableModel model;
-    private InventoryAppGUI sia;
+    private TableRowSorter rowSorter;
 
+    ItemTable(InventoryAppGUI inventoryApp) {
+        this.inventoryApp = inventoryApp;
 
-    public ItemTable(InventoryAppGUI sia) {
-        this.sia = sia;
         cols = new String[]{"Item", "Quantity", "Min. Stock Limit"};
-        data = new String[sia.getMyInventory().getLowStockItems().size()][NUM_COLS];
-
-//        table = new JTable(data, cols);
-//        scrollPane = new JScrollPane(
-//                table, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED, JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
-//        model = new DefaultTableModel(data, cols);
-//        model.setColumnIdentifiers(cols);
-//        table.setModel(model);
+        data = new String[getNumRows()][NUM_COLS];
+        data = getData();
 
         model = new DefaultTableModel(data, cols);
         table = new JTable(model);
+        rowSorter = new TableRowSorter(model);
+        table.setRowSorter(rowSorter);
 
-        setUp();
+
+        scrollPane = new JScrollPane(table);
+
+
+
     }
 
-    private void setUp() {
-        setSize(WIDTH, HEIGHT);
-        setVisible(true);
-        setLayout(null);
-        //setOpaque(true);
-
-//        scrollPane.setVisible(true);
-//        scrollPane.setBounds(800, 0, WIDTH, HEIGHT);
-
-        //scrollPane.add(table);
-        data = getData();
-        add(new JScrollPane(table));
-
-
-        //scrollPane.add(table);
-        //sia.getLayeredPane().add(scrollPane);
+    public JTable getJTable() {
+        return table;
     }
 
-    private String[][] getData() {
-        int row = 0;
-
-//        data[0][0] = "a";
-//        data[0][1] = "b";
-//        data[0][2] = "c";
-
-        for (Item i : sia.getMyInventory().getLowStockItems()) {
-            data[row][0] = (i.getName());
-            data[row][1] = String.valueOf(i.getQuantity());
-            data[row][2] = String.valueOf(i.getMinimumStockLimit());
-            row++;
-
-        }
-        return data;
+    public TableRowSorter getRowSorter() {
+        return rowSorter;
     }
 
-//    public void setUp() {
-//        //model.setColumnIdentifiers(cols);
-//        //table.setModel(model);
-////        table.setBackground(Color.GREEN);
-////        table.setGridColor(Color.BLACK);
+    public abstract int getNumRows();
+
+
+    public abstract Object[][] getData();
+
+
+
+//    public void refresh() {
 //
-//        scrollPane.setBackground(Color.BLUE);
-//        //scrollPane.setVisible(true);
-//        scrollPane.setBounds(800, 0, WIDTH, HEIGHT);
-//        //scrollPane.add(table);
+//        data = new String[sia.getMyInventory().getItemList().size()][NUM_COLS];
+//        data = getData();
+//        model = new DefaultTableModel(data, cols);
+//        table = new JTable(model);
+//        scrollPane = new JScrollPane(table);
+//        add(scrollPane);
+//
+//        setVisible(true);
+//        setOpaque(true);
 //
 //    }
-
-//    public void display() {
-//        sia.getLayeredPane().add(scrollPane);
-//
-//    }
-
 
 }
+
+

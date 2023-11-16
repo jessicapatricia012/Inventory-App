@@ -91,7 +91,7 @@ public class InventoryAppGUI extends JFrame implements ActionListener {
     }
 
     public void displayItemList() {
-        new ItemListWindow(this);
+        new AllItemsWindow(this);
     }
 
     public void refreshItemList() {
