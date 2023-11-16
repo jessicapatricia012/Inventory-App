@@ -22,9 +22,7 @@ public class AllItemsWindow extends JFrame implements ActionListener {
     private JButton deleteItemButton;
 
     private ItemTable allItemsTable;
-
     private JScrollPane scrollPane;
-
     private JPanel searchPanel;
 
 
@@ -49,8 +47,6 @@ public class AllItemsWindow extends JFrame implements ActionListener {
         setSize(WIDTH, HEIGHT);
         setLayout(new BoxLayout(this.getContentPane(), BoxLayout.Y_AXIS));
 
-
-
         setUpSearchPanel();
         add(searchPanel);
         add(scrollPane);
@@ -60,9 +56,7 @@ public class AllItemsWindow extends JFrame implements ActionListener {
 //            add(b);
 //        }
 
-
         setVisible(true);
-
     }
 
     public void setUpSearchPanel() {
