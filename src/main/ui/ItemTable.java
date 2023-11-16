@@ -29,11 +29,7 @@ public abstract class ItemTable extends JTable {
         rowSorter = new TableRowSorter(model);
         table.setRowSorter(rowSorter);
 
-
         scrollPane = new JScrollPane(table);
-
-
-
     }
 
     public JTable getJTable() {
@@ -46,25 +42,7 @@ public abstract class ItemTable extends JTable {
 
     public abstract int getNumRows();
 
-
     public abstract Object[][] getData();
-
-
-
-//    public void refresh() {
-//
-//        data = new String[sia.getMyInventory().getItemList().size()][NUM_COLS];
-//        data = getData();
-//        model = new DefaultTableModel(data, cols);
-//        table = new JTable(model);
-//        scrollPane = new JScrollPane(table);
-//        add(scrollPane);
-//
-//        setVisible(true);
-//        setOpaque(true);
-//
-//    }
-
 }
 
 

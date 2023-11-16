@@ -29,8 +29,5 @@ public class LowStockWindow extends JFrame {
         add(scrollPane);
 
         setVisible(true);
-
     }
-
-
 }
