@@ -199,6 +199,7 @@ public class AllItemsWindow extends JFrame implements ActionListener {
                     "ERROR", JOptionPane.ERROR_MESSAGE);
         } else {
             allItemsTable.getModel().addRow(new Item(enteredName, enteredQuantity, enteredMinStockLimit));
+            emptyTextFields();
         }
     }
 
@@ -221,9 +222,7 @@ public class AllItemsWindow extends JFrame implements ActionListener {
                 enteredMinStockLimit = (int) allItemsTable.getModel().getValueAt(rows[0], 2);
             }
             allItemsTable.getModel().editRow(enteredName, enteredQuantity, enteredMinStockLimit, rows[0]);
-            for (JTextField tf : textFields) {
-                tf.setText("");
-            }
+            emptyTextFields();
         }
     }
 
@@ -261,5 +260,11 @@ public class AllItemsWindow extends JFrame implements ActionListener {
             iterator++;
         }
         return convertedRows;
+    }
+
+    public void emptyTextFields() {
+        for (JTextField tf : textFields) {
+            tf.setText("");
+        }
     }
 }

@@ -7,6 +7,7 @@ import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import java.util.List;
 
+// Represents an application main menu panel
 public class MainMenu extends JPanel implements ActionListener {
     private static final int WIDTH = 200;
     private static final int HEIGHT = 600;
@@ -20,6 +21,7 @@ public class MainMenu extends JPanel implements ActionListener {
 
     private InventoryAppGUI inventoryApp;
 
+    // EFFECTS: construct components
     public MainMenu(InventoryAppGUI inventoryApp) {
         this.inventoryApp = inventoryApp;
 
@@ -33,6 +35,8 @@ public class MainMenu extends JPanel implements ActionListener {
         setUp();
     }
 
+    // MODIFIES: this, JButtons, JLabel
+    // EFFECTS: set up JFrame
     public void setUp() {
         setSize(WIDTH, HEIGHT);
         setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
@@ -47,12 +51,16 @@ public class MainMenu extends JPanel implements ActionListener {
         setVisible(true);
     }
 
+    // MODIFIES: JLabel
+    // EFFECTS: set up JLabel
     public void setUpLabel() {
         mainMenuLabel.setHorizontalAlignment(JLabel.CENTER);
         mainMenuLabel.setVerticalAlignment(JLabel.TOP);
         mainMenuLabel.setBounds(0, 10, 800, 50);
     }
 
+    // MODIFIES: JButtons
+    // EFFECTS: set up JButtons
     public void setUpButtons() {
         buttons.add(allItemsButton);
         buttons.add(receiveItemsButton);
@@ -71,47 +79,63 @@ public class MainMenu extends JPanel implements ActionListener {
         }
     }
 
-
-    private void doSetMinimumStockLimit(String itemName) {
-        int minStockLimit = Integer.parseInt(JOptionPane.showInputDialog("Enter item minimum stock limit: "));
-        while (minStockLimit < 0) {
-            JOptionPane.showMessageDialog(null,
-                    "Minimum stock limit should be greater than or equal to 0.\n",
-                    "ERROR", JOptionPane.ERROR_MESSAGE);
-            minStockLimit = Integer.parseInt(JOptionPane.showInputDialog("Enter item minimum stock limit: "));
-        }
-        inventoryApp.getMyInventory().getItem(itemName).setMinimumStockLimit(minStockLimit);
-        JOptionPane.showMessageDialog(null, itemName
-                + "'s minimum stock limit has been set.");
-    }
-
-
+    // MODIFIES: inventoryApp.getMyInventory(), inventoryApp.getMyInventory().getItem(itemName)
+    // EFFECTS: process item being shipped into the inventory, prompts user to input the quantity being received, and
+    //          updates the item's stock. If item is not in the inventory, register the new item.
     public void doReceiveItems() {
-        String itemName = JOptionPane.showInputDialog("Enter the item being received:").toUpperCase();
-        int itemQuantity = Integer.parseInt(JOptionPane.showInputDialog("Item quantity:"));
+        try {
+            String itemName = JOptionPane.showInputDialog("Enter the item being received:").toUpperCase();
+            int itemQuantity = Integer.parseInt(JOptionPane.showInputDialog("Item quantity:"));
 
 
-        if (itemQuantity <= 0) {
-            JOptionPane.showMessageDialog(null, "Quantity has to be greater than 0",
-                    "ERROR", JOptionPane.ERROR_MESSAGE);
-        } else {
-            if (inventoryApp.getMyInventory().addItem(itemName)) {
-                JOptionPane.showMessageDialog(null,
-                        "A new item " + itemName + " has been registered in the inventory.");
-
-                doSetMinimumStockLimit(itemName);
+            if (itemQuantity <= 0) {
+                JOptionPane.showMessageDialog(null, "Quantity has to be greater than 0",
+                        "ERROR", JOptionPane.ERROR_MESSAGE);
             } else {
-                JOptionPane.showMessageDialog(null, itemName + "'s stock has been updated.");
+                if (inventoryApp.getMyInventory().addItem(itemName)) {
+                    JOptionPane.showMessageDialog(null,
+                            "A new item " + itemName + " has been registered in the inventory.");
+
+                    doSetMinimumStockLimit(itemName);
+                } else {
+                    JOptionPane.showMessageDialog(null, itemName + "'s stock has been updated.");
+                }
+                inventoryApp.getMyInventory().getItem(itemName).addQuantity(itemQuantity);
+                checkLowStock(itemName);
             }
-            inventoryApp.getMyInventory().getItem(itemName).addQuantity(itemQuantity);
-            checkLowStock(itemName);
+        } catch (Exception e)  {
+            ;
         }
     }
 
-    // MODIFIES: this, myInventory.getItem(itemName)
-    // EFFECTS: process item being shipped out of the inventory. If item is not in the inventory, prints out a statement
-    //          that says so. Otherwise, prompts user to input the quantity being shipped out, and updates the item's
-    //          stock. If the stock is insufficient, prints out a statement that says so.
+    // MODIFIES: inventoryApp.getMyInventory().getItem(itemName)
+    // EFFECTS : prompts user to enter the item's minimum stock limit that has to be an integer >= 0, otherwise
+    //           user will be prompted to enter another integer >= 0
+    private void doSetMinimumStockLimit(String itemName) {
+        while (true) {
+            try {
+                int minStockLimit = Integer.parseInt(JOptionPane.showInputDialog("Enter item minimum stock limit: "));
+                while (minStockLimit < 0) {
+                    JOptionPane.showMessageDialog(null,
+                            "Minimum stock limit should be greater than or equal to 0.",
+                            "ERROR", JOptionPane.ERROR_MESSAGE);
+                    minStockLimit = Integer.parseInt(JOptionPane.showInputDialog("Enter item minimum stock limit: "));
+                }
+                inventoryApp.getMyInventory().getItem(itemName).setMinimumStockLimit(minStockLimit);
+                JOptionPane.showMessageDialog(null, itemName
+                        + "'s minimum stock limit has been set.");
+                break;
+            } catch (Exception e) {
+                JOptionPane.showMessageDialog(null,
+                        "Minimum stock limit should be an integer", "ERROR", JOptionPane.ERROR_MESSAGE);
+            }
+        }
+    }
+
+    // MODIFIES: inventoryApp.getMyInventory().getItem(itemName)
+    // EFFECTS: process item being shipped out of the inventory. If item is not in the inventory, let the use know.
+    //          Otherwise, prompts user to input the quantity being shipped out, and updates the item's
+    //          stock. If the stock is insufficient, let the user know and make no update.
     private void doShipItemsOut() {
         String itemName = JOptionPane.showInputDialog("Enter the item being shipped out:").toUpperCase();
 
@@ -132,12 +156,14 @@ public class MainMenu extends JPanel implements ActionListener {
         }
     }
 
+    // EFFECTS: notify user if item is low in stock
     private void checkLowStock(String itemName) {
         if (inventoryApp.getMyInventory().getItem(itemName).isLowStock()) {
             JOptionPane.showMessageDialog(null, "Item " + itemName + " is low in stock.");
         }
     }
 
+    // EFFECTS: displays item that has low stock. If no item is low in stock, display a message that says so.
     private void doLowStockWarnings() {
         if (inventoryApp.getMyInventory().getLowStockItems().isEmpty()) {
             JOptionPane.showMessageDialog(null, "No item is low in stock.");
