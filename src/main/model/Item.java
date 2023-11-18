@@ -16,6 +16,12 @@ public class Item implements Writable {
         this.minimumStockLimit = 0;
     }
 
+    public Item(String name, int quantity, int minimumStockLimit) {
+        this.name = name;
+        this.quantity = quantity;
+        this.minimumStockLimit = minimumStockLimit;
+    }
+
     //REQUIRES: amount > 0
     //MODIFIES: this
     //EFFECTS: adds quantity by amount
@@ -35,6 +41,13 @@ public class Item implements Writable {
     //          Returns false if quantity is greater than or equal to minimum stock limit
     public boolean isLowStock() {
         return quantity < minimumStockLimit;
+    }
+
+    // REQUIRES: quantity >= 0
+    // MODIFIES: this
+    // EFFECTS: assigns this.quantity to quantity
+    public void setName(String name) {
+        this.name = name;
     }
 
     // REQUIRES: quantity >= 0

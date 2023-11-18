@@ -9,7 +9,7 @@ public class LowStockWindow extends JFrame {
     private JLabel restockLabel;
     private JScrollPane scrollPane;
 
-    private ItemTable lowStockItemsTable;
+    private LowStockItemsTable lowStockItemsTable;
 
     LowStockWindow(InventoryAppGUI inventoryApp) {
         super("Low In Stock");

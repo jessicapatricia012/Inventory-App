@@ -7,17 +7,25 @@ import static org.junit.jupiter.api.Assertions.*;
 
 public class ItemTest {
     private Item testItem;
+    private Item testItem2;
+
 
     @BeforeEach
     public void runBefore() {
-        testItem = new Item("Test Item");
+        testItem = new Item("Name");
+        testItem2 = new Item("Name 2", 10, 1);
+
     }
 
     @Test
     public void testConstructor() {
-        assertEquals("Test Item", testItem.getName());
+        assertEquals("Name", testItem.getName());
         assertEquals(0, testItem.getQuantity());
         assertEquals(0, testItem.getMinimumStockLimit());
+
+        assertEquals("Name 2", testItem2.getName());
+        assertEquals(10, testItem2.getQuantity());
+        assertEquals(1, testItem2.getMinimumStockLimit());
     }
 
     @Test
@@ -87,6 +95,12 @@ public class ItemTest {
         testItem.addQuantity(10);
         testItem.setMinimumStockLimit(10);
         assertFalse(testItem.isLowStock());
+    }
+
+    @Test
+    public void setName() {
+        testItem.setName("New Name");
+        assertEquals("New Name", testItem.getName());
     }
 
     @Test
