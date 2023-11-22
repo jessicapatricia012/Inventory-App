@@ -16,6 +16,7 @@ public class Item implements Writable {
         this.minimumStockLimit = 0;
     }
 
+    //EFFECTS: constructs an item with given name, quantity, and minimumStockLimit
     public Item(String name, int quantity, int minimumStockLimit) {
         this.name = name;
         this.quantity = quantity;
@@ -45,7 +46,7 @@ public class Item implements Writable {
 
     // REQUIRES: quantity >= 0
     // MODIFIES: this
-    // EFFECTS: assigns this.quantity to quantity
+    // EFFECTS: assigns this.name to name
     public void setName(String name) {
         this.name = name;
     }

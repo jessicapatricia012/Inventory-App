@@ -9,10 +9,9 @@ import java.util.List;
 
 // Represents an application main menu panel
 public class MainMenu extends JPanel implements ActionListener {
-    private static final int WIDTH = 200;
-    private static final int HEIGHT = 600;
+    private static final int WIDTH = 600;
+    private static final int HEIGHT = 400;
 
-    private JLabel mainMenuLabel;
     private List<JButton> buttons;
     private JButton allItemsButton;
     private JButton receiveItemsButton;
@@ -21,67 +20,58 @@ public class MainMenu extends JPanel implements ActionListener {
 
     private InventoryAppGUI inventoryApp;
 
-    // EFFECTS: construct components
+    // EFFECTS : creates a main menu
     public MainMenu(InventoryAppGUI inventoryApp) {
         this.inventoryApp = inventoryApp;
 
-        mainMenuLabel = new JLabel("Main Menu");
+        setUp();
+    }
+
+    // MODIFIES: this
+    // EFFECTS : sets up JPanel and adds components
+    public void setUp() {
+        setSize(WIDTH, HEIGHT);
+        setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
+        setAlignmentX(CENTER_ALIGNMENT);
+
+        add(Box.createRigidArea(new Dimension(50, 50)));
+
+        setUpButtons();
+        for (JButton b : buttons) {
+            add(b);
+            add(Box.createRigidArea(new Dimension(50, 20)));
+        }
+
+        setVisible(true);
+    }
+
+    // MODIFIES: this
+    // EFFECTS : initializes and sets up JButtons
+    public void setUpButtons() {
         buttons = new ArrayList<>();
         allItemsButton = new JButton("All Items");
         receiveItemsButton = new JButton("Receive Items");
         shipItemsOutButton = new JButton("Ship Items Out");
         lowInStockButton = new JButton("Low In Stock");
 
-        setUp();
-    }
-
-    // MODIFIES: this, JButtons, JLabel
-    // EFFECTS: set up JFrame
-    public void setUp() {
-        setSize(WIDTH, HEIGHT);
-        setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
-
-        setUpLabel();
-        add(mainMenuLabel);
-
-        setUpButtons();
-        for (JButton b : buttons) {
-            add(b);
-        }
-        setVisible(true);
-    }
-
-    // MODIFIES: JLabel
-    // EFFECTS: set up JLabel
-    public void setUpLabel() {
-        mainMenuLabel.setHorizontalAlignment(JLabel.CENTER);
-        mainMenuLabel.setVerticalAlignment(JLabel.TOP);
-        mainMenuLabel.setBounds(0, 10, 800, 50);
-    }
-
-    // MODIFIES: JButtons
-    // EFFECTS: set up JButtons
-    public void setUpButtons() {
         buttons.add(allItemsButton);
         buttons.add(receiveItemsButton);
         buttons.add(shipItemsOutButton);
         buttons.add(lowInStockButton);
 
-//        itemListButton.setSize(400, 50);
-//        receiveItemsButton.setBounds(200, 190, 400, 50);
-//        shipItemsOutButton.setBounds(200, 250, 400, 50);
-//        lowInStockButton.setBounds(200, 400, 400, 50);
-
         for (JButton b : buttons) {
-            b.setSize(new Dimension(400, 50));
+            b.setAlignmentX(JButton.CENTER_ALIGNMENT);
+            b.setMaximumSize(new Dimension(200, 30));
             b.setFocusable(false);
             b.addActionListener(this);
+            b.setBorder(BorderFactory.createEtchedBorder());
+            b.setBackground(new Color(248, 248, 248));
         }
     }
 
     // MODIFIES: inventoryApp.getMyInventory(), inventoryApp.getMyInventory().getItem(itemName)
-    // EFFECTS: process item being shipped into the inventory, prompts user to input the quantity being received, and
-    //          updates the item's stock. If item is not in the inventory, register the new item.
+    // EFFECTS : process item being shipped into the inventory, prompts user to input the quantity being received, and
+    //           updates the item's stock. If item is not in the inventory, register the new item.
     public void doReceiveItems() {
         try {
             String itemName = JOptionPane.showInputDialog("Enter the item being received:").toUpperCase();
@@ -133,9 +123,9 @@ public class MainMenu extends JPanel implements ActionListener {
     }
 
     // MODIFIES: inventoryApp.getMyInventory().getItem(itemName)
-    // EFFECTS: process item being shipped out of the inventory. If item is not in the inventory, let the use know.
-    //          Otherwise, prompts user to input the quantity being shipped out, and updates the item's
-    //          stock. If the stock is insufficient, let the user know and make no update.
+    // EFFECTS : processes item being shipped out of the inventory. If item is not in the inventory, displays a message.
+    //           Otherwise, prompts user to input the quantity being shipped out, and updates the item's
+    //           stock. If the stock is insufficient, displays a message and makes no update.
     private void doShipItemsOut() {
         String itemName = JOptionPane.showInputDialog("Enter the item being shipped out:").toUpperCase();
 
@@ -156,32 +146,50 @@ public class MainMenu extends JPanel implements ActionListener {
         }
     }
 
-    // EFFECTS: notify user if item is low in stock
+    // EFFECTS : notifies user if item is low in stock
     private void checkLowStock(String itemName) {
         if (inventoryApp.getMyInventory().getItem(itemName).isLowStock()) {
             JOptionPane.showMessageDialog(null, "Item " + itemName + " is low in stock.");
         }
     }
 
-    // EFFECTS: displays item that has low stock. If no item is low in stock, display a message that says so.
+    // EFFECTS : displays item that has low stock. If no item is low in stock, display a message that says so.
     private void doLowStockWarnings() {
         if (inventoryApp.getMyInventory().getLowStockItems().isEmpty()) {
             JOptionPane.showMessageDialog(null, "No item is low in stock.");
         } else {
-            inventoryApp.displayLowStockWarnings();
+            inventoryApp.displayLowStockItemList();
         }
     }
 
+    // MODIFIES: this
+    // EFFECTS : handles ActionEvent
     @Override
     public void actionPerformed(ActionEvent e) {
         if (e.getSource() == allItemsButton) {
             inventoryApp.displayItemList();
         } else if (e.getSource() == receiveItemsButton) {
+            closeOtherWindows();
             doReceiveItems();
         } else if (e.getSource() == shipItemsOutButton) {
+            closeOtherWindows();
             doShipItemsOut();
         } else if (e.getSource() == lowInStockButton) {
             doLowStockWarnings();
+        }
+    }
+
+    // EFFECTS : closes item list and low stock item windows. Does nothing if windows are not open
+    public void closeOtherWindows() {
+        try {
+            inventoryApp.closeItemList();
+        } catch (Exception e1) {
+            ;
+        }
+        try {
+            inventoryApp.closeLowStockItemList();
+        } catch (Exception e2) {
+            ;
         }
     }
 }

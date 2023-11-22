@@ -6,7 +6,6 @@ import persistence.JsonReader;
 import persistence.JsonWriter;
 
 import javax.swing.*;
-import java.awt.event.ActionListener;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.Scanner;
@@ -24,12 +23,8 @@ public class InventoryApp {
     private JsonWriter jsonWriter;
     private JsonReader jsonReader;
 
-    private JButton button;
-
     //EFFECTS: run the app
     public InventoryApp() throws FileNotFoundException {
-
-
         runApp();
     }
 

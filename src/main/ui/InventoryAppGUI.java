@@ -15,8 +15,8 @@ import java.io.IOException;
 public class InventoryAppGUI extends JFrame implements ActionListener {
     private static final String JSON_STORE = "./data/inventory.json";
 
-    private static final int WIDTH = 800;
-    private static final int HEIGHT = 600;
+    private static final int WIDTH = 600;
+    private static final int HEIGHT = 400;
 
     private Inventory myInventory;
 
@@ -28,6 +28,9 @@ public class InventoryAppGUI extends JFrame implements ActionListener {
     private JMenuItem loadItem;
     private JMenuItem saveItem;
 
+    private AllItemsWindow allItemsWindow;
+    private LowStockWindow lowStockWindow;
+
     //EFFECTS: run the app
     public InventoryAppGUI() throws FileNotFoundException {
         super("Inventory App");
@@ -36,7 +39,7 @@ public class InventoryAppGUI extends JFrame implements ActionListener {
     }
 
     // MODIFIES: this
-    // EFFECTS: starts the app and displays menu
+    // EFFECTS : starts the app and displays main menu
     private void runApp() {
         init();
 
@@ -48,7 +51,7 @@ public class InventoryAppGUI extends JFrame implements ActionListener {
     }
 
     // MODIFIES: this
-    // EFFECTS: initializes inventory and Scanner
+    // EFFECTS : initializes fields
     private void init() {
         jsonWriter = new JsonWriter(JSON_STORE);
         jsonReader = new JsonReader(JSON_STORE);
@@ -60,6 +63,8 @@ public class InventoryAppGUI extends JFrame implements ActionListener {
         saveItem = new JMenuItem("Save");
     }
 
+    // MODIFIES: this
+    // EFFECTS : sets up JFrame
     private void setUpJFrame() {
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setSize(WIDTH, HEIGHT);
@@ -67,6 +72,8 @@ public class InventoryAppGUI extends JFrame implements ActionListener {
         setLayout(null);
     }
 
+    // MODIFIES: this
+    // EFFECTS : sets up menuBar, JMenus and JMenuItems
     private void setUpMenuBar() {
         menuBar.add(fileMenu);
         fileMenu.add(loadItem);
@@ -80,16 +87,32 @@ public class InventoryAppGUI extends JFrame implements ActionListener {
         saveItem.addActionListener(this);
     }
 
+    // MODIFIES: this
+    // EFFECTS : displays main menu panel
     public void displayMainMenu() {
         add(new MainMenu(this));
     }
 
+    // EFFECTS : opens a new window that displays item list
     public void displayItemList() {
-        new AllItemsWindow(this);
+        allItemsWindow = new AllItemsWindow(this);
     }
 
-    public void displayLowStockWarnings() {
-        new LowStockWindow(this);
+    // EFFECTS : opens a new window that displays low stock item list
+    public void displayLowStockItemList() {
+        lowStockWindow = new LowStockWindow(this);
+    }
+
+    // MODIFIES: AllItemsWindow
+    // EFFECTS : closes item list window
+    public void closeItemList() {
+        allItemsWindow.dispose();
+    }
+
+    // MODIFIES: LowStockWindow
+    // EFFECTS : closes low stock item list window
+    public void closeLowStockItemList() {
+        lowStockWindow.dispose();
     }
 
     // EFFECTS: saves the inventory to file
@@ -121,11 +144,12 @@ public class InventoryAppGUI extends JFrame implements ActionListener {
         return myInventory;
     }
 
+    // MODIFIES: this
+    // EFFECTS : handles ActionEvent for loading and saving
     @Override
     public void actionPerformed(ActionEvent e) {
         if (e.getSource() == loadItem) {
             loadInventory();
-
         } else if (e.getSource() == saveItem) {
             saveInventory();
         }

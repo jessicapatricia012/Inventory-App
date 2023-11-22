@@ -24,10 +24,10 @@ an item is received or shipped out of the storage/warehouse.
 # Instructions for Grader
 - You can generate the first required action related to the user story "adding multiple Xs to a Y", which is adding
   new items to the inventory, by clicking on "Receive Item" then enter a new item that is not yet registered in the
-  inventory.
+  inventory, or clicking on "All Items" then add items manually by filling the text fields and click "Add Item".
 - You can generate the second required action related to the user story "adding multiple Xs to a Y", which is searching
   for items based on user's input, by clicking on "All Items" then enter the name of the item and press Enter or click
   on the "Search" button.
-- You can locate my visual component (JTables) by clicking on "All Items" or "Low in Stock".
+- You can locate my visual component (ImageIcons) by clicking on "All Items" and you will see ImageIcons on the JButtons
 - You can save the state of my application by clicking "File" on the menu bar then click "Save", or Alt+F then S
 - You can reload the state of my application by clicking "File" on the menu bar then click "Load", or Alt+F then L

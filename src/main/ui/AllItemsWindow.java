@@ -3,12 +3,14 @@ package ui;
 import model.Item;
 
 import javax.swing.*;
+import javax.swing.table.TableRowSorter;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import java.util.List;
 
+// A new window that displays list of all items in the inventory
 public class AllItemsWindow extends JFrame implements ActionListener {
     private static final int WIDTH = 600;
     private static final int HEIGHT = 400;
@@ -19,9 +21,7 @@ public class AllItemsWindow extends JFrame implements ActionListener {
     private int enteredMinStockLimit;
 
     private InventoryAppGUI inventoryApp;
-    private List<Item> items;
 
-    private List<JLabel> labels;
     private JLabel nameLabel;
     private JLabel quantityLabel;
     private JLabel minStockLimitLabel;
@@ -38,58 +38,45 @@ public class AllItemsWindow extends JFrame implements ActionListener {
     private JButton editItemButton;
     private JButton deleteItemButton;
 
+    private ImageIcon searchIcon;
+    private ImageIcon addIcon;
+    private ImageIcon editIcon;
+    private ImageIcon deleteIcon;
 
-    private ItemTable allItemsTable;
     private JScrollPane scrollPane;
+    private JTable table;
+    private AllItemsCustomTableModel model;
+    private TableRowSorter rowSorter;
+
     private JPanel searchPanel;
     private JPanel textFieldPanel;
     private JPanel buttonsPanel;
 
 
+
+    // EFFECTS : creates a new window
     AllItemsWindow(InventoryAppGUI inventoryApp) {
         super("Item List");
         this.inventoryApp = inventoryApp;
-        items = inventoryApp.getMyInventory().getItemList();
-
-        searchPanel = new JPanel(new FlowLayout());
-        textFieldPanel = new JPanel(new FlowLayout());
-        buttonsPanel = new JPanel(new FlowLayout());
-
-
-        textFields = new ArrayList<>();
-        searchTextField = new JTextField();
-        nameTextField = new JTextField();
-        quantityTextField = new JTextField();
-        minStockLimitTextField = new JTextField();
-
-        buttons = new ArrayList<>();
-        searchButton = new JButton("Search");
-        addItemButton = new JButton("Add Item");
-        editItemButton = new JButton("Edit Item");
-        deleteItemButton = new JButton("Delete Item");
-
-        labels = new ArrayList<>();
-        nameLabel = new JLabel("Name:");
-        quantityLabel = new JLabel("Quantity");
-        minStockLimitLabel = new JLabel("Min. Stock Limit:");
-
-
-        allItemsTable = new ItemTable(inventoryApp);
-        scrollPane = new JScrollPane(allItemsTable.getJTable());
 
         setUp();
     }
 
+    // MODIFIES: this
+    // EFFECTS : sets up JFrame and adds components
     public void setUp() {
         setSize(WIDTH, HEIGHT);
         setLayout(new BoxLayout(this.getContentPane(), BoxLayout.Y_AXIS));
 
+        setUpLabels();
+        setUpTextFields();
+        setUpIcons();
         setUpButtons();
-        setUpTextField();
 
         setUpSearchPanel();
         add(searchPanel);
 
+        setUpTablePanel();
         add(scrollPane);
 
         setUpTextFieldsPanel();
@@ -102,52 +89,65 @@ public class AllItemsWindow extends JFrame implements ActionListener {
         setVisible(true);
     }
 
+    // MODIFIES: this
+    // EFFECTS : initializes, sets up, and adds components to searchPanel
     public void setUpSearchPanel() {
-        searchTextField.addActionListener(this);
-        searchTextField.setPreferredSize(new Dimension(200, 20));
+        searchPanel = new JPanel(new FlowLayout());
 
         searchPanel.add(searchTextField);
         searchPanel.add(searchButton);
-        searchTextField.addActionListener(this);
-
     }
 
+    // MODIFIES: this
+    // EFFECTS : initializes and sets up scrollPane
+    public void setUpTablePanel() {
+        model = new AllItemsCustomTableModel(inventoryApp.getMyInventory());
+        table = new JTable(model);
+        rowSorter = new TableRowSorter(model);
+        table.setRowSorter(rowSorter);
+        scrollPane = new JScrollPane(table);
+    }
+
+    // MODIFIES: this
+    // EFFECTS : initializes and adds components to textFieldPanel
     public void setUpTextFieldsPanel() {
+        textFieldPanel = new JPanel(new FlowLayout());
+
         textFieldPanel.add(nameLabel);
         textFieldPanel.add(nameTextField);
         textFieldPanel.add(quantityLabel);
         textFieldPanel.add(quantityTextField);
         textFieldPanel.add(minStockLimitLabel);
         textFieldPanel.add(minStockLimitTextField);
-
-
     }
 
+    // MODIFIES: this
+    // EFFECTS : initializes and adds components to buttonsPanel
     public void setUpButtonsPanel() {
+        buttonsPanel = new JPanel(new FlowLayout());
+
         buttonsPanel.add(addItemButton);
         buttonsPanel.add(editItemButton);
         buttonsPanel.add(deleteItemButton);
     }
 
-    public void setUpButtons() {
-        buttons.add(searchButton);
-        buttons.add(addItemButton);
-        buttons.add(editItemButton);
-        buttons.add(deleteItemButton);
-
-//        itemListButton.setSize(400, 50);
-//        receiveItemsButton.setBounds(200, 190, 400, 50);
-//        shipItemsOutButton.setBounds(200, 250, 400, 50);
-//        lowInStockButton.setBounds(200, 400, 400, 50);
-
-        for (JButton b : buttons) {
-            b.setSize(new Dimension(400, 20));
-            b.setFocusable(false);
-            b.addActionListener(this);
-        }
+    // MODIFIES: this
+    // EFFECTS : initializes and sets up JLabels
+    public void setUpLabels() {
+        nameLabel = new JLabel("Name:");
+        quantityLabel = new JLabel("Quantity:");
+        minStockLimitLabel = new JLabel("Min. Stock Limit:");
     }
 
-    public void setUpTextField() {
+    // MODIFIES: this
+    // EFFECTS : initializes and sets up JTextFields
+    public void setUpTextFields() {
+        textFields = new ArrayList<>();
+        searchTextField = new JTextField();
+        nameTextField = new JTextField();
+        quantityTextField = new JTextField();
+        minStockLimitTextField = new JTextField();
+
         textFields.add(nameTextField);
         textFields.add(quantityTextField);
         textFields.add(minStockLimitTextField);
@@ -155,19 +155,61 @@ public class AllItemsWindow extends JFrame implements ActionListener {
         for (JTextField tf : textFields) {
             tf.addActionListener(this);
             tf.setPreferredSize(new Dimension(100, 20));
+            tf.setBorder(BorderFactory.createLineBorder(Color.LIGHT_GRAY));
         }
+
+        searchTextField.addActionListener(this);
+        searchTextField.setPreferredSize(new Dimension(200, 20));
+        searchTextField.setBorder(BorderFactory.createLineBorder(Color.LIGHT_GRAY));
+
     }
 
+    // MODIFIES: this
+    // EFFECTS : initializes and sets up JButtons
+    public void setUpButtons() {
+        buttons = new ArrayList<>();
+        searchButton = new JButton("Search");
+        addItemButton = new JButton("Add Item");
+        editItemButton = new JButton("Edit Item");
+        deleteItemButton = new JButton("Delete Item");
+        buttons.add(searchButton);
+        buttons.add(addItemButton);
+        buttons.add(editItemButton);
+        buttons.add(deleteItemButton);
+        for (JButton b : buttons) {
+            b.setPreferredSize(new Dimension(120, 30));
+            b.setFocusable(false);
+            b.addActionListener(this);
+            b.setBorder(BorderFactory.createEtchedBorder());
+            b.setBackground(new Color(248, 248, 248));
+        }
+        searchButton.setPreferredSize(new Dimension(100, 25));
+        deleteItemButton.setForeground(Color.WHITE);
+        deleteItemButton.setBackground(new Color(229, 74, 74));
+        searchButton.setIcon(searchIcon);
+        addItemButton.setIcon(addIcon);
+        editItemButton.setIcon(editIcon);
+        deleteItemButton.setIcon(deleteIcon);
+    }
 
+    // MODIFIES: this
+    // EFFECTS : initializes and sets up ImageIcons
+    private void setUpIcons() {
+        searchIcon = new ImageIcon(((new ImageIcon("./data/Search icon.png"))
+                .getImage()).getScaledInstance(15,15, java.awt.Image.SCALE_SMOOTH));
+        addIcon = new ImageIcon(((new ImageIcon("./data/Add icon.png"))
+                .getImage()).getScaledInstance(20,20, java.awt.Image.SCALE_SMOOTH));
+        editIcon = new ImageIcon(((new ImageIcon("./data/Edit icon.png"))
+                .getImage()).getScaledInstance(20,20, java.awt.Image.SCALE_SMOOTH));
+        deleteIcon = new ImageIcon(((new ImageIcon("./data/Delete icon.png"))
+                .getImage()).getScaledInstance(20,20, java.awt.Image.SCALE_SMOOTH));
+    }
+
+    // MODIFIES: this
+    // EFFECTS : handles ActionEvent
     @Override
     public void actionPerformed(ActionEvent e) {
-        int[] rows = convertRows(allItemsTable.getJTable().getSelectedRows());
-//        if (rows.length == 1) {
-//            editItemButton.setEnabled(true);
-//        } else if (rows.length > 1) {
-//            editItemButton.setEnabled(true);
-//            deleteItemButton.setEnabled(true);
-//        }
+        int[] rows = convertRows(table.getSelectedRows());
 
         collectInputFromTextFields();
 
@@ -181,7 +223,7 @@ public class AllItemsWindow extends JFrame implements ActionListener {
             doDeleteItem(rows);
         }
 
-        allItemsTable.getRowSorter().setRowFilter(new RowFilter() {
+        rowSorter.setRowFilter(new RowFilter() {
             @Override
             public boolean include(Entry entry) {
                 String name = entry.getValue(0).toString();
@@ -190,6 +232,10 @@ public class AllItemsWindow extends JFrame implements ActionListener {
         });
     }
 
+    // MODIFIES: inventoryApp.getMyInventory()
+    // EFFECTS : adds new item based on user's input.
+    //           If item is already in inventory, displays a message and does nothing.
+    //           If the name field is blank, displays a message and does nothing.
     private void doAddItem() {
         if (inventoryApp.getMyInventory().itemIsThere(enteredName)) {
             JOptionPane.showMessageDialog(null, "Item already exist.",
@@ -198,49 +244,63 @@ public class AllItemsWindow extends JFrame implements ActionListener {
             JOptionPane.showMessageDialog(null, "Name should not be blank.",
                     "ERROR", JOptionPane.ERROR_MESSAGE);
         } else {
-            allItemsTable.getModel().addRow(new Item(enteredName, enteredQuantity, enteredMinStockLimit));
+            model.addRow(new Item(enteredName, enteredQuantity, enteredMinStockLimit));
             emptyTextFields();
         }
     }
 
+    // MODIFIES: inventoryApp.getMyInventory()
+    // EFFECTS : edits item of selected row based on user's input.
+    //           If no row or more than one row is selected, displays a message and does nothing.
+    //           If item with the same name exists, displays a message and does nothing.
+    //           For any blank field(s), no changes are made.
     private void doEditItem(int[] rows) {
-        if (allItemsTable.getJTable().getSelectedRows().length != 1) {
+        if (table.getSelectedRows().length != 1) {
             JOptionPane.showMessageDialog(null, "Please select one item you would like to edit.",
                     "ERROR", JOptionPane.ERROR_MESSAGE);
-        } else if (!enteredName.equalsIgnoreCase((String) allItemsTable.getModel().getValueAt(rows[0], 0))
+        } else if (!enteredName.equalsIgnoreCase((String) model.getValueAt(rows[0], 0))
                 && inventoryApp.getMyInventory().itemIsThere(enteredName)) {
             JOptionPane.showMessageDialog(null, "Item with the same name already exist.",
                     "ERROR", JOptionPane.ERROR_MESSAGE);
         } else {
             if (enteredName.equals("")) {
-                enteredName = (String) allItemsTable.getModel().getValueAt(rows[0], 0);
+                enteredName = (String) model.getValueAt(rows[0], 0);
             }
-            if (enteredQuantity == 0) {
-                enteredQuantity = (int) allItemsTable.getModel().getValueAt(rows[0], 1);
+            if (quantityTextField.getText().equals("")) {
+                enteredQuantity = (int) model.getValueAt(rows[0], 1);
             }
-            if (enteredMinStockLimit == 0) {
-                enteredMinStockLimit = (int) allItemsTable.getModel().getValueAt(rows[0], 2);
+            if (minStockLimitTextField.getText().equals("")) {
+                enteredMinStockLimit = (int) model.getValueAt(rows[0], 2);
             }
-            allItemsTable.getModel().editRow(enteredName, enteredQuantity, enteredMinStockLimit, rows[0]);
-            emptyTextFields();
+            model.editRow(enteredName, enteredQuantity, enteredMinStockLimit, rows[0]);
+            for (JTextField tf : textFields) {
+                tf.setText("");
+            }
         }
     }
 
+    // MODIFIES: inventoryApp.getMyInventory()
+    // EFFECTS : deletes item(s) of selected row(s).
+    //           If no row is selected, displays a message.
     private void doDeleteItem(int[] rows) {
-        if (allItemsTable.getJTable().getSelectedRows().length != 0) {
-            allItemsTable.getModel().deleteRows(rows);
+        if (table.getSelectedRows().length != 0) {
+            model.deleteRows(rows);
         } else {
             JOptionPane.showMessageDialog(null, "Please select the item(s) "
                     + "you would like to delete", "ERROR", JOptionPane.ERROR_MESSAGE);
         }
     }
 
+    // MODIFIES: this
+    // EFFECTS : collects input from JTextFields.
+    //           If the quantity and/or min. stock limit text fields are empty, takes 0 as the value.
     public void collectInputFromTextFields() {
         searchedItem = searchTextField.getText().toUpperCase();
         enteredName = nameTextField.getText().toUpperCase();
 
         if (quantityTextField.getText().equals("")) {
             enteredQuantity = 0;
+
         } else {
             enteredQuantity = Integer.valueOf(quantityTextField.getText());
         }
@@ -252,16 +312,19 @@ public class AllItemsWindow extends JFrame implements ActionListener {
         }
     }
 
+    // EFFECT : convert row number after sorted or filtered
     public int[] convertRows(int[] selectedRow) {
         int[] convertedRows = new int[selectedRow.length];
         int iterator = 0;
         for (int i : selectedRow) {
-            convertedRows[iterator] = allItemsTable.getRowSorter().convertRowIndexToView(i);
+            convertedRows[iterator] = rowSorter.convertRowIndexToModel(i);
             iterator++;
         }
         return convertedRows;
     }
 
+    // MODIFIES: this
+    // EFFECTS : clears JTextFields
     public void emptyTextFields() {
         for (JTextField tf : textFields) {
             tf.setText("");
