@@ -212,19 +212,20 @@ public class AllItemsWindow extends JFrame implements ActionListener {
         int[] rows = convertRows(table.getSelectedRows());
         searchedItem = searchTextField.getText().toUpperCase();
 
-
         if (e.getSource() == searchButton) {
             searchedItem = searchTextField.getText().toUpperCase();
         } else if (e.getSource() == addItemButton) {
-            getTextForAddItem(rows);
             doAddItem();
         } else if (e.getSource() == editItemButton) {
-            getTextForEditItem(rows);
-            doEditItem(rows);
+            try {
+                doEditItem(rows);
+            } catch (ArrayIndexOutOfBoundsException ex) {
+                JOptionPane.showMessageDialog(null, "Please select the item you would like to "
+                        + "edit.","ERROR", JOptionPane.ERROR_MESSAGE);
+            }
         } else if (e.getSource() == deleteItemButton) {
             doDeleteItem(rows);
         }
-
         rowSorter.setRowFilter(new RowFilter() {
             @Override
             public boolean include(Entry entry) {
@@ -239,6 +240,7 @@ public class AllItemsWindow extends JFrame implements ActionListener {
     //           If item is already in inventory, displays a message and does nothing.
     //           If the name field is blank, displays a message and does nothing.
     private void doAddItem() {
+        getTextForAddItem();
         if (inventoryApp.getMyInventory().itemIsThere(enteredName)) {
             JOptionPane.showMessageDialog(null, "Item already exist.",
                     "ERROR", JOptionPane.ERROR_MESSAGE);
@@ -264,8 +266,9 @@ public class AllItemsWindow extends JFrame implements ActionListener {
     //           If quantity or min. stock limit < 0, displays a message and does nothing.
     //           For any blank field(s), no changes are made.
     private void doEditItem(int[] rows) {
+        getTextForEditItem(rows);
         if (table.getSelectedRows().length != 1) {
-            JOptionPane.showMessageDialog(null, "Please select one item you would like to edit.",
+            JOptionPane.showMessageDialog(null, "Please select only one item.",
                     "ERROR", JOptionPane.ERROR_MESSAGE);
         } else if (!enteredName.equalsIgnoreCase((String) model.getValueAt(rows[0], 0))
                 && inventoryApp.getMyInventory().itemIsThere(enteredName)) {
@@ -298,7 +301,7 @@ public class AllItemsWindow extends JFrame implements ActionListener {
     // MODIFIES: this
     // EFFECTS : collects input from JTextFields.
     //           If the quantity and/or min. stock limit text fields are empty, takes 0 as the value.
-    public void getTextForAddItem(int[] rows) {
+    public void getTextForAddItem() {
         enteredName = nameTextField.getText().toUpperCase();
 
         if (quantityTextField.getText().equals("")) {
@@ -313,8 +316,9 @@ public class AllItemsWindow extends JFrame implements ActionListener {
         }
     }
 
-    // REQUIRES: rows.length > 0
-    // EFFECTS : if text field is empty
+    // MODIFIES: this
+    // EFFECTS : collects input from JTextFields.
+    //           If any of the field is empty,
     private void getTextForEditItem(int[] rows) {
         enteredName = nameTextField.getText().toUpperCase();
 
