@@ -79,7 +79,7 @@ public class MainMenu extends JPanel implements ActionListener {
 
 
             if (itemQuantity <= 0) {
-                JOptionPane.showMessageDialog(null, "Quantity has to be greater than 0",
+                JOptionPane.showMessageDialog(null, "Quantity should be greater than 0",
                         "ERROR", JOptionPane.ERROR_MESSAGE);
             } else {
                 if (inventoryApp.getMyInventory().addItem(itemName)) {
@@ -98,6 +98,7 @@ public class MainMenu extends JPanel implements ActionListener {
         }
     }
 
+    // REQUIRES: inventoryApp.getMyInventory().getItem(itemName).itemIsThere()
     // MODIFIES: inventoryApp.getMyInventory().getItem(itemName)
     // EFFECTS : prompts user to enter the item's minimum stock limit that has to be an integer >= 0, otherwise
     //           user will be prompted to enter another integer >= 0
@@ -107,7 +108,7 @@ public class MainMenu extends JPanel implements ActionListener {
                 int minStockLimit = Integer.parseInt(JOptionPane.showInputDialog("Enter item minimum stock limit: "));
                 while (minStockLimit < 0) {
                     JOptionPane.showMessageDialog(null,
-                            "Minimum stock limit should be greater than or equal to 0.",
+                            "Minimum stock limit should be greater than or equals to 0.",
                             "ERROR", JOptionPane.ERROR_MESSAGE);
                     minStockLimit = Integer.parseInt(JOptionPane.showInputDialog("Enter item minimum stock limit: "));
                 }
@@ -146,6 +147,7 @@ public class MainMenu extends JPanel implements ActionListener {
         }
     }
 
+    // REQUIRES: inventoryApp.getMyInventory().getItem(itemName).itemIsThere()
     // EFFECTS : notifies user if item is low in stock
     private void checkLowStock(String itemName) {
         if (inventoryApp.getMyInventory().getItem(itemName).isLowStock()) {

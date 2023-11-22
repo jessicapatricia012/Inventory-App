@@ -20,6 +20,7 @@ public class AllItemsCustomTableModel extends CustomTableModel {
         return items.getItemList().size();
     }
 
+    // REQUIRES: (rowIndex >= 0) && (columnIndex >= 0)
     // EFFECTS : returns Object contained in the cell that corresponds to rowIndex and columnIndex
     @Override
     public Object getValueAt(int rowIndex, int columnIndex) {
@@ -35,6 +36,7 @@ public class AllItemsCustomTableModel extends CustomTableModel {
         return null;
     }
 
+    // REQUIRES: item is not in inventory
     // MODIFIES: this
     // EFFECTS : adds a new row with a new item
     public void addRow(Item item) {
@@ -43,6 +45,7 @@ public class AllItemsCustomTableModel extends CustomTableModel {
         fireTableRowsInserted(row, row);
     }
 
+    // REQUIRES: name is not an empty string
     // MODIFIES: items.getItemList().get(row)
     // EFFECTS : edits row
     public void editRow(String name, int quantity, int minStockLimit, int row) {

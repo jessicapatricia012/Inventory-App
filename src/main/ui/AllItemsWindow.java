@@ -210,14 +210,16 @@ public class AllItemsWindow extends JFrame implements ActionListener {
     @Override
     public void actionPerformed(ActionEvent e) {
         int[] rows = convertRows(table.getSelectedRows());
+        searchedItem = searchTextField.getText().toUpperCase();
 
-        collectInputFromTextFields();
 
         if (e.getSource() == searchButton) {
             searchedItem = searchTextField.getText().toUpperCase();
         } else if (e.getSource() == addItemButton) {
+            getTextForAddItem(rows);
             doAddItem();
         } else if (e.getSource() == editItemButton) {
+            getTextForEditItem(rows);
             doEditItem(rows);
         } else if (e.getSource() == deleteItemButton) {
             doDeleteItem(rows);
@@ -243,6 +245,12 @@ public class AllItemsWindow extends JFrame implements ActionListener {
         } else if (enteredName.equals("")) {
             JOptionPane.showMessageDialog(null, "Name should not be blank.",
                     "ERROR", JOptionPane.ERROR_MESSAGE);
+        } else if (enteredQuantity < 0) {
+            JOptionPane.showMessageDialog(null, "Quantity should be greater than or equals to 0",
+                    "ERROR", JOptionPane.ERROR_MESSAGE);
+        } else if (enteredMinStockLimit < 0) {
+            JOptionPane.showMessageDialog(null, "Minimum stock limit should be greater than or "
+                    + "equals to 0","ERROR", JOptionPane.ERROR_MESSAGE);
         } else {
             model.addRow(new Item(enteredName, enteredQuantity, enteredMinStockLimit));
             emptyTextFields();
@@ -253,6 +261,7 @@ public class AllItemsWindow extends JFrame implements ActionListener {
     // EFFECTS : edits item of selected row based on user's input.
     //           If no row or more than one row is selected, displays a message and does nothing.
     //           If item with the same name exists, displays a message and does nothing.
+    //           If quantity or min. stock limit < 0, displays a message and does nothing.
     //           For any blank field(s), no changes are made.
     private void doEditItem(int[] rows) {
         if (table.getSelectedRows().length != 1) {
@@ -262,20 +271,15 @@ public class AllItemsWindow extends JFrame implements ActionListener {
                 && inventoryApp.getMyInventory().itemIsThere(enteredName)) {
             JOptionPane.showMessageDialog(null, "Item with the same name already exist.",
                     "ERROR", JOptionPane.ERROR_MESSAGE);
+        } else if (enteredQuantity < 0) {
+            JOptionPane.showMessageDialog(null, "Quantity should be greater than or equals to 0",
+                    "ERROR", JOptionPane.ERROR_MESSAGE);
+        } else if (enteredMinStockLimit < 0) {
+            JOptionPane.showMessageDialog(null, "Minimum stock limit should be greater than or "
+                    + "equals to 0", "ERROR", JOptionPane.ERROR_MESSAGE);
         } else {
-            if (enteredName.equals("")) {
-                enteredName = (String) model.getValueAt(rows[0], 0);
-            }
-            if (quantityTextField.getText().equals("")) {
-                enteredQuantity = (int) model.getValueAt(rows[0], 1);
-            }
-            if (minStockLimitTextField.getText().equals("")) {
-                enteredMinStockLimit = (int) model.getValueAt(rows[0], 2);
-            }
             model.editRow(enteredName, enteredQuantity, enteredMinStockLimit, rows[0]);
-            for (JTextField tf : textFields) {
-                tf.setText("");
-            }
+            emptyTextFields();
         }
     }
 
@@ -294,23 +298,41 @@ public class AllItemsWindow extends JFrame implements ActionListener {
     // MODIFIES: this
     // EFFECTS : collects input from JTextFields.
     //           If the quantity and/or min. stock limit text fields are empty, takes 0 as the value.
-    public void collectInputFromTextFields() {
-        searchedItem = searchTextField.getText().toUpperCase();
+    public void getTextForAddItem(int[] rows) {
         enteredName = nameTextField.getText().toUpperCase();
 
         if (quantityTextField.getText().equals("")) {
             enteredQuantity = 0;
-
         } else {
             enteredQuantity = Integer.valueOf(quantityTextField.getText());
         }
-
         if (minStockLimitTextField.getText().equals("")) {
             enteredMinStockLimit = 0;
         } else {
             enteredMinStockLimit = Integer.valueOf(minStockLimitTextField.getText());
         }
     }
+
+    // REQUIRES: rows.length > 0
+    // EFFECTS : if text field is empty
+    private void getTextForEditItem(int[] rows) {
+        enteredName = nameTextField.getText().toUpperCase();
+
+        if (enteredName.equals("")) {
+            enteredName = (String) model.getValueAt(rows[0], 0);
+        }
+        if (quantityTextField.getText().equals("")) {
+            enteredQuantity = (int) model.getValueAt(rows[0], 1);
+        } else {
+            enteredQuantity = Integer.valueOf(quantityTextField.getText());
+        }
+        if (minStockLimitTextField.getText().equals("")) {
+            enteredMinStockLimit = (int) model.getValueAt(rows[0], 2);
+        } else {
+            enteredMinStockLimit = Integer.valueOf(minStockLimitTextField.getText());
+        }
+    }
+
 
     // EFFECT : convert row number after sorted or filtered
     public int[] convertRows(int[] selectedRow) {
