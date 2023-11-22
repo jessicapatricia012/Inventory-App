@@ -93,8 +93,9 @@ public class MainMenu extends JPanel implements ActionListener {
                 inventoryApp.getMyInventory().getItem(itemName).addQuantity(itemQuantity);
                 checkLowStock(itemName);
             }
-        } catch (Exception e)  {
-            ;
+        } catch (NumberFormatException e)  {
+            JOptionPane.showMessageDialog(null, "Quantity should be an integer.",
+                    "ERROR", JOptionPane.ERROR_MESSAGE);
         }
     }
 
@@ -116,7 +117,7 @@ public class MainMenu extends JPanel implements ActionListener {
                 JOptionPane.showMessageDialog(null, itemName
                         + "'s minimum stock limit has been set.");
                 break;
-            } catch (Exception e) {
+            } catch (NumberFormatException e) {
                 JOptionPane.showMessageDialog(null,
                         "Minimum stock limit should be an integer", "ERROR", JOptionPane.ERROR_MESSAGE);
             }
@@ -129,21 +130,25 @@ public class MainMenu extends JPanel implements ActionListener {
     //           stock. If the stock is insufficient, displays a message and makes no update.
     private void doShipItemsOut() {
         String itemName = JOptionPane.showInputDialog("Enter the item being shipped out:").toUpperCase();
+        try {
+            if (inventoryApp.getMyInventory().itemIsThere(itemName)) {
+                int itemQuantity = Integer.parseInt(JOptionPane.showInputDialog("Item quantity:"));
 
-        if (inventoryApp.getMyInventory().itemIsThere(itemName)) {
-            int itemQuantity = Integer.parseInt(JOptionPane.showInputDialog("Item quantity:"));
-
-            if (0 < itemQuantity && itemQuantity <= inventoryApp.getMyInventory().getItem(itemName).getQuantity()) {
-                inventoryApp.getMyInventory().getItem(itemName).subtractQuantity(itemQuantity);
-                JOptionPane.showMessageDialog(null, itemName + "'s stock has been updated.");
-                checkLowStock(itemName);
-            } else if (itemQuantity <= 0) {
-                JOptionPane.showMessageDialog(null, "Quantity has to be greater than 0");
+                if (0 < itemQuantity && itemQuantity <= inventoryApp.getMyInventory().getItem(itemName).getQuantity()) {
+                    inventoryApp.getMyInventory().getItem(itemName).subtractQuantity(itemQuantity);
+                    JOptionPane.showMessageDialog(null, itemName + "'s stock has been updated.");
+                    checkLowStock(itemName);
+                } else if (itemQuantity <= 0) {
+                    JOptionPane.showMessageDialog(null, "Quantity has to be greater than 0");
+                } else {
+                    JOptionPane.showMessageDialog(null, "Insufficient stock.");
+                }
             } else {
-                JOptionPane.showMessageDialog(null, "Insufficient stock.");
+                JOptionPane.showMessageDialog(null, "Item " + itemName + " is not found.");
             }
-        } else {
-            JOptionPane.showMessageDialog(null, "Item " + itemName + " is not found.");
+        } catch (NumberFormatException e) {
+            JOptionPane.showMessageDialog(null, "Quantity should be an integer.",
+                    "ERROR", JOptionPane.ERROR_MESSAGE);
         }
     }
 

@@ -249,11 +249,11 @@ public class AllItemsWindow extends JFrame implements ActionListener {
                 JOptionPane.showMessageDialog(null, "Name should not be blank.",
                         "ERROR", JOptionPane.ERROR_MESSAGE);
             } else if (enteredQuantity < 0) {
-                JOptionPane.showMessageDialog(null, "Quantity should be greater than or equals to 0",
-                        "ERROR", JOptionPane.ERROR_MESSAGE);
+                JOptionPane.showMessageDialog(null, "Quantity should be greater than or equals "
+                        + "to 0", "ERROR", JOptionPane.ERROR_MESSAGE);
             } else if (enteredMinStockLimit < 0) {
-                JOptionPane.showMessageDialog(null, "Minimum stock limit should be greater than or "
-                        + "equals to 0","ERROR", JOptionPane.ERROR_MESSAGE);
+                JOptionPane.showMessageDialog(null, "Minimum stock limit should be greater than "
+                        + "or equals to 0","ERROR", JOptionPane.ERROR_MESSAGE);
             } else {
                 model.addRow(new Item(enteredName, enteredQuantity, enteredMinStockLimit));
                 emptyTextFields();
@@ -281,11 +281,11 @@ public class AllItemsWindow extends JFrame implements ActionListener {
                 JOptionPane.showMessageDialog(null, "Item with the same name already exist.",
                         "ERROR", JOptionPane.ERROR_MESSAGE);
             } else if (enteredQuantity < 0) {
-                JOptionPane.showMessageDialog(null, "Quantity should be greater than or equals to 0",
-                        "ERROR", JOptionPane.ERROR_MESSAGE);
+                JOptionPane.showMessageDialog(null, "Quantity should be greater than or equals "
+                        + "to 0", "ERROR", JOptionPane.ERROR_MESSAGE);
             } else if (enteredMinStockLimit < 0) {
-                JOptionPane.showMessageDialog(null, "Minimum stock limit should be greater than or "
-                        + "equals to 0", "ERROR", JOptionPane.ERROR_MESSAGE);
+                JOptionPane.showMessageDialog(null, "Minimum stock limit should be greater than "
+                        + "or equals to 0", "ERROR", JOptionPane.ERROR_MESSAGE);
             } else {
                 model.editRow(enteredName, enteredQuantity, enteredMinStockLimit, rows[0]);
                 emptyTextFields();
