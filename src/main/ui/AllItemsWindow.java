@@ -318,7 +318,7 @@ public class AllItemsWindow extends JFrame implements ActionListener {
 
     // MODIFIES: this
     // EFFECTS : collects input from JTextFields.
-    //           If any of the field is empty,
+    //           If any of the text field is empty, takes the field of selected row
     private void getTextForEditItem(int[] rows) {
         enteredName = nameTextField.getText().toUpperCase();
 
