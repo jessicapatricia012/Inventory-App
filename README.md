@@ -32,10 +32,16 @@ an item is received or shipped out of the storage/warehouse.
 - You can reload the state of my application by clicking "File" on the menu bar then click "Load", or Alt+F then L
 
 # Phase 4: Task 2
-Tue Nov 28 19:40:35 PST 2023
-All items displayed.
-Tue Nov 28 19:40:38 PST 2023
+Tue Nov 28 21:30:24 PST 2023
 New item A added.
-Tue Nov 28 19:40:40 PST 2023
-Item A removed.
+
+Tue Nov 28 21:30:27 PST 2023
+New item B added.
+
+Tue Nov 28 21:30:29 PST 2023
+Item B removed.
+
+Tue Nov 28 21:30:31 PST 2023
+Saved to file.
+
 

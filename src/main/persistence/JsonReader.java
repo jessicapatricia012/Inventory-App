@@ -1,5 +1,7 @@
 package persistence;
 
+import model.Event;
+import model.EventLog;
 import model.Inventory;
 
 import java.io.IOException;
@@ -24,6 +26,7 @@ public class JsonReader {
     public Inventory read() throws IOException {
         String jsonData = readFile(source);
         JSONObject jsonObject = new JSONObject(jsonData);
+        EventLog.getInstance().logEvent(new Event("Loaded from file.\n"));
         return parseInventory(jsonObject);
     }
 

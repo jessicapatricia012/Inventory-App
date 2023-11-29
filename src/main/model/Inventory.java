@@ -34,7 +34,7 @@ public class Inventory implements Writable {
         if (itemIsThere(name)) {
             return false;
         } else {
-            EventLog.getInstance().logEvent(new Event("New item " + name + " added."));
+            EventLog.getInstance().logEvent(new Event("New item " + name + " added.\n"));
             return itemList.add(newItem);
         }
     }
@@ -45,7 +45,7 @@ public class Inventory implements Writable {
     public boolean removeItem(String name) {
         for (Item i : itemList) {
             if (i.getName().equalsIgnoreCase(name)) {
-                EventLog.getInstance().logEvent(new Event("Item " + name + " removed."));
+                EventLog.getInstance().logEvent(new Event("Item " + name + " removed.\n"));
                 return itemList.remove(i);
             }
         }
@@ -79,11 +79,6 @@ public class Inventory implements Writable {
         }
         return lowStockItems;
     }
-
-    public void createDisplayLog() {
-        EventLog.getInstance().logEvent(new Event("All items displayed."));
-    }
-
 
     @Override
     public JSONObject toJson() {

@@ -11,7 +11,7 @@ public class LowStockWindow extends JFrame {
     private JLabel restockLabel;
     private JTable table;
     private JScrollPane scrollPane;
-    private CustomTableModel model;
+    private LowStockCustomTableModel model;
     private TableRowSorter rowSorter;
 
     // EFFECTS : creates a new window and initialized fields

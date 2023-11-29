@@ -12,7 +12,6 @@ public class AllItemsCustomTableModel extends CustomTableModel {
     // EFFECTS: initializes field
     public AllItemsCustomTableModel(Inventory items) {
         super(items);
-        items.createDisplayLog();
     }
 
     // EFFECTS : returns number of rows or number of all items

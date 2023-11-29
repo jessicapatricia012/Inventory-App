@@ -28,6 +28,7 @@ public class InventoryAppGUI extends JFrame implements ActionListener {
     private JMenuItem loadItem;
     private JMenuItem saveItem;
 
+    private MainMenu mainMenu;
     private AllItemsWindow allItemsWindow;
     private LowStockWindow lowStockWindow;
 
@@ -57,6 +58,7 @@ public class InventoryAppGUI extends JFrame implements ActionListener {
         jsonReader = new JsonReader(JSON_STORE);
         myInventory = new Inventory();
 
+        mainMenu = new MainMenu(this);
         menuBar = new JMenuBar();
         fileMenu = new JMenu("File");
         loadItem = new JMenuItem("Load");
@@ -100,8 +102,8 @@ public class InventoryAppGUI extends JFrame implements ActionListener {
 
     // MODIFIES: this
     // EFFECTS : displays main menu panel
-    public void displayMainMenu() {
-        add(new MainMenu(this));
+    public void displayMainMenu()    {
+        add(mainMenu);
     }
 
     // EFFECTS : opens a new window that displays item list

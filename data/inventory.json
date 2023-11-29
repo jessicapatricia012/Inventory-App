@@ -1,42 +1,5 @@
-{"items": [
-    {
-        "Quantity": 0,
-        "Minimum Stock Limit": 5,
-        "Name": "AA"
-    },
-    {
-        "Quantity": 10,
-        "Minimum Stock Limit": 2,
-        "Name": "B"
-    },
-    {
-        "Quantity": 31,
-        "Minimum Stock Limit": 15,
-        "Name": "C"
-    },
-    {
-        "Quantity": 21,
-        "Minimum Stock Limit": 30,
-        "Name": "D"
-    },
-    {
-        "Quantity": 10,
-        "Minimum Stock Limit": 10,
-        "Name": "A"
-    },
-    {
-        "Quantity": 0,
-        "Minimum Stock Limit": 0,
-        "Name": "AAA"
-    },
-    {
-        "Quantity": 1,
-        "Minimum Stock Limit": 0,
-        "Name": "AB"
-    },
-    {
-        "Quantity": 0,
-        "Minimum Stock Limit": 10,
-        "Name": "AAB"
-    }
-]}
+{"items": [{
+    "Quantity": 0,
+    "Minimum Stock Limit": 0,
+    "Name": "A"
+}]}
