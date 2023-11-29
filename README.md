@@ -44,4 +44,17 @@ Item B removed.
 Tue Nov 28 21:30:31 PST 2023
 Saved to file.
 
+# Phase 4: Task 3
+The first thing that bugs me is the presence of AllItemsWindow and LowStockWindow. They are two separate windows from 
+the main window, InventoryAppGUI. AllItemsWindow displays a table of all items, while LowStockWindow displays a table 
+of items that are low in stock, which is a subset of all items. I would like to combine those tables and mark the rows 
+of items that are low in stock in red so that I do not have to have a separate view of low-stock items.
+ 
+Having one separate window to view the items is good enough, but I would love to combine that window with the main
+JFrame, i.e. having another JPanel added to InventoryAppGUI instead of creating a new window. This is what I tried to
+do when I was just getting started with Phase 3, and though the panel was there, the table did not show up somehow. Now
+that I have become more familiar with Java Swing, that is what I would love to implement to simplify the view of my
+program.
+
+
 
