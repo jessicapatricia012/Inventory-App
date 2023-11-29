@@ -18,5 +18,25 @@
         "Quantity": 21,
         "Minimum Stock Limit": 30,
         "Name": "D"
+    },
+    {
+        "Quantity": 10,
+        "Minimum Stock Limit": 10,
+        "Name": "A"
+    },
+    {
+        "Quantity": 0,
+        "Minimum Stock Limit": 0,
+        "Name": "AAA"
+    },
+    {
+        "Quantity": 1,
+        "Minimum Stock Limit": 0,
+        "Name": "AB"
+    },
+    {
+        "Quantity": 0,
+        "Minimum Stock Limit": 10,
+        "Name": "AAB"
     }
 ]}

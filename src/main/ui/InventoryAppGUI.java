@@ -1,13 +1,13 @@
 package ui;
 
+import model.Event;
+import model.EventLog;
 import model.Inventory;
 import persistence.JsonReader;
 import persistence.JsonWriter;
 
 import javax.swing.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.KeyEvent;
+import java.awt.event.*;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 
@@ -70,6 +70,17 @@ public class InventoryAppGUI extends JFrame implements ActionListener {
         setSize(WIDTH, HEIGHT);
         setVisible(true);
         setLayout(null);
+
+        addWindowListener(new WindowAdapter() {
+            @Override
+            public void windowClosing(WindowEvent e) {
+                EventLog log = EventLog.getInstance();
+                for (Event ev : log) {
+                    System.out.println(ev.toString());
+                }
+                e.getWindow().dispose();
+            }
+        });
     }
 
     // MODIFIES: this
@@ -154,5 +165,6 @@ public class InventoryAppGUI extends JFrame implements ActionListener {
             saveInventory();
         }
     }
+
 }
 

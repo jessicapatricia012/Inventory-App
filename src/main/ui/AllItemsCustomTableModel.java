@@ -12,6 +12,7 @@ public class AllItemsCustomTableModel extends CustomTableModel {
     // EFFECTS: initializes field
     public AllItemsCustomTableModel(Inventory items) {
         super(items);
+        items.createDisplayLog();
     }
 
     // EFFECTS : returns number of rows or number of all items
@@ -40,7 +41,7 @@ public class AllItemsCustomTableModel extends CustomTableModel {
     // MODIFIES: this
     // EFFECTS : adds a new row with a new item
     public void addRow(Item item) {
-        items.getItemList().add(item);
+        items.addItem(item.getName());
         int row = items.getItemList().indexOf(item);
         fireTableRowsInserted(row, row);
     }
@@ -61,7 +62,9 @@ public class AllItemsCustomTableModel extends CustomTableModel {
         for (int i : rows) {
             removedItems.add(items.getItemList().get(i));
         }
-        items.getItemList().removeAll(removedItems);
+        for (Item i : removedItems) {
+            items.removeItem(i.getName());
+        }
         //fireTableRowsDeleted(rows[0], rows[rows.length - 1]);
     }
 }
