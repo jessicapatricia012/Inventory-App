@@ -1,0 +1,12 @@
+{"items": [
+    {
+        "Quantity": 10,
+        "Minimum Stock Limit": 1,
+        "Name": "Item 1"
+    },
+    {
+        "Quantity": 20,
+        "Minimum Stock Limit": 2,
+        "Name": "Item 2"
+    }
+]}
